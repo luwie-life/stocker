@@ -5,7 +5,8 @@ import '../../client-config.js';
 // expired sessions. Never scatter raw fetch() calls across pages.
 
 const API_HOST = window.location.hostname === '127.0.0.1' ? '127.0.0.1' : 'localhost';
-const API_BASE = window.STOCKER_API_BASE || `http://${API_HOST}:4000/api`;
+const configuredApiBase = window.STOCKER_API_BASE?.replace(/\/$/, '');
+const API_BASE = configuredApiBase || `http://${API_HOST}:4000/api`;
 
 export function getToken() {
   return localStorage.getItem('stocker_token');

@@ -23,11 +23,17 @@ const marketingRoutes = require('./routes/marketingRoutes');
 
 const app = express();
 const allowedOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(',').map((origin) => origin.trim())
-  : '*';
+  ? process.env.CLIENT_URL.split(',').map((origin) => origin.trim().replace(/\/$/, ''))
+  : ['https://stocker-saas.vercel.app', 'http://localhost:5500', 'http://127.0.0.1:5500'];
 
 app.use(helmet());
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ''))) return callback(null, true);
+    return callback(new Error('Origin is not allowed by CORS'));
+  },
+  credentials: true,
+}));
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use('/api/billing/webhook', billingWebhookRoutes);
 app.use(express.json({ limit: '2mb' }));
