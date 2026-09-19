@@ -17,6 +17,23 @@ const salesHistoryEl = document.getElementById('sales-history');
 document.getElementById('amount-received-label').textContent = `Amount received (${currency})`;
 
 let cart = []; // { productId, name, unitPriceMinor, quantity }
+const productCacheKey = 'stocker_pos_products';
+
+function readProductCache() {
+  try { return JSON.parse(localStorage.getItem(productCacheKey) || '{}'); } catch { return {}; }
+}
+
+function cacheProducts(products) {
+  const cache = readProductCache();
+  products.forEach((product) => { cache[product._id] = { product, cachedAt: Date.now() }; });
+  localStorage.setItem(productCacheKey, JSON.stringify(cache));
+}
+
+function cachedProducts(search) {
+  const cache = readProductCache();
+  const term = search.toLowerCase();
+  return Object.values(cache).map((entry) => entry.product).filter((product) => !term || product.name.toLowerCase().includes(term) || product.sku?.toLowerCase().includes(term) || product.barcodes?.includes(search));
+}
 
 function cartTotalMinor() {
   return cart.reduce((sum, line) => sum + line.unitPriceMinor * line.quantity, 0);
@@ -79,6 +96,7 @@ async function handleScanOrSearch() {
   try {
     // Try an exact barcode match first (typical USB scanner behavior).
     const byBarcode = await api.get(`/products/barcode/${encodeURIComponent(value)}`);
+    cacheProducts([byBarcode.data]);
     addToCart(byBarcode.data);
     return;
   } catch (err) {
@@ -91,6 +109,7 @@ async function handleScanOrSearch() {
   // Fall back to a name/SKU search and show matches to pick from.
   try {
     const res = await api.get('/products', { search: value, limit: 8 });
+    cacheProducts(res.data);
     if (res.data.length === 0) {
       searchResults.innerHTML = `<p class="search-status">No products match "${escapeHtml(value)}".</p>`;
       return;
@@ -105,7 +124,11 @@ async function handleScanOrSearch() {
       el.addEventListener('click', () => addToCart(res.data.find((p) => p._id === el.dataset.id)))
     );
   } catch (err) {
-    searchResults.innerHTML = '<p class="search-status search-status-error">Catalogue search failed. Check the server connection and try again.</p>';
+    const fallback = cachedProducts(value).slice(0, 8);
+    if (fallback.length) {
+      searchResults.innerHTML = '<p class="search-status">Offline catalogue results. Confirm checkout when connection returns.</p>' + fallback.map((p) => `<button class="product-result" type="button" data-id="${p._id}"><span>${escapeHtml(p.name)}</span><strong>${formatMoney(p.sellingPriceMinor, currency)}</strong></button>`).join('');
+      searchResults.querySelectorAll('[data-id]').forEach((el) => el.addEventListener('click', () => addToCart(fallback.find((p) => p._id === el.dataset.id))));
+    } else searchResults.innerHTML = '<p class="search-status search-status-error">Catalogue search is temporarily unavailable. Try again when the connection returns.</p>';
     showToast(err.message, 'error');
   }
 }
@@ -137,8 +160,10 @@ document.getElementById('checkout-btn').addEventListener('click', async (e) => {
         branchId,
         cart: cart.map((l) => ({ productId: l.productId, quantity: l.quantity })),
         payments: [{ method, amountMinor: Math.min(amountPaidMinor, total) }],
-      });
-      showReceipt(res.data);
+      }, { queueWhenOffline: true, idempotencyKey: crypto.randomUUID() });
+      if (res.data.queued) {
+        showToast('Sale saved on this device and will sync when the connection returns.', 'success');
+      } else showReceipt(res.data);
       cart = [];
       renderCart();
     } catch (err) {

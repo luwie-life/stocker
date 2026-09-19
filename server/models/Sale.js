@@ -53,10 +53,12 @@ const saleSchema = new mongoose.Schema({
   },
 
   currency: { type: String, required: true },
+  clientRequestId: { type: String, trim: true },
 }, { timestamps: true });
 
 saleSchema.index({ business: 1, saleNumber: 1 }, { unique: true });
 saleSchema.index({ business: 1, branch: 1, createdAt: -1 });
 saleSchema.index({ business: 1, cashierMembership: 1, createdAt: -1 });
+saleSchema.index({ business: 1, clientRequestId: 1 }, { unique: true, sparse: true });
 
 module.exports = mongoose.model('Sale', saleSchema);

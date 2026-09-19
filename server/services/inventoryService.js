@@ -9,7 +9,7 @@ const AppError = require('../utils/AppError');
 //
 // `delta` is signed: positive to add stock, negative to remove it.
 // Pass a mongoose session to run inside a transaction (required for sales).
-async function adjustInventory({ business, branch, product, delta, type, reference, reason, performedBy, session, allowNegative = false }) {
+async function adjustInventory({ business, branch, product, delta, type, reference, reason, performedBy, clientRequestId, session, allowNegative = false }) {
   let updated;
 
   if (delta >= 0 || allowNegative) {
@@ -44,7 +44,7 @@ async function adjustInventory({ business, branch, product, delta, type, referen
       quantityChange: delta,
       previousQuantity,
       newQuantity: updated.quantity,
-      reference, reason, performedBy,
+      reference, reason, performedBy, clientRequestId,
     }],
     { session }
   );

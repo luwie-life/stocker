@@ -33,16 +33,29 @@ async function ensureBootstrapSuperAdmin() {
 }
 
 const PORT = process.env.PORT || 4000;
+let server;
 
 async function start() {
   try {
     await connectDB();
     await ensureBootstrapSuperAdmin();
-    app.listen(PORT, () => console.log(`[server] STOCKER API listening on port ${PORT}`));
+    server = app.listen(PORT, () => console.log(`[server] STOCKER API listening on port ${PORT}`));
+    server.keepAliveTimeout = 65000;
+    server.headersTimeout = 66000;
+    server.requestTimeout = Number(process.env.REQUEST_TIMEOUT_MS || 30000);
   } catch (err) {
     console.error('[server] failed to start:', err.message);
     process.exit(1);
   }
 }
+
+async function shutdown(signal) {
+  console.log(`[server] ${signal} received; shutting down gracefully`);
+  if (server) await new Promise((resolve) => server.close(resolve));
+  process.exit(0);
+}
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
 
 start();

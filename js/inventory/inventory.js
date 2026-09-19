@@ -145,14 +145,15 @@ document.getElementById('stock-form').addEventListener('submit', async (e) => {
     return;
   }
   try {
-    await api.post('/inventory/adjust', {
+    const result = await api.post('/inventory/adjust', {
       branchId,
       productId: document.getElementById('s-product-id').value,
       quantity: Number(document.getElementById('s-quantity').value),
       type: document.getElementById('s-type').value,
       reason: document.getElementById('s-reason').value.trim() || undefined,
-    });
-    showToast('Stock updated.', 'success');
+      clientRequestId: crypto.randomUUID(),
+    }, { queueWhenOffline: true, idempotencyKey: crypto.randomUUID() });
+    showToast(result.data.queued ? 'Stock change saved and will sync when online.' : 'Stock updated.', 'success');
     stockModal.style.display = 'none';
     await loadProducts();
   } catch (err) {

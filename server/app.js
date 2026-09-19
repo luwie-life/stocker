@@ -3,6 +3,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+let compression;
+try { compression = require('compression'); } catch { compression = null; }
 
 const errorHandler = require('./middleware/errorHandler');
 const authRoutes = require('./routes/authRoutes');
@@ -33,6 +35,7 @@ const allowedOrigins = new Set([
 ]);
 
 app.use(helmet());
+if (compression) app.use(compression({ threshold: 1024 }));
 app.use(cors({
   origin: (origin, callback) => {
     const normalizedOrigin = origin?.replace(/\/$/, '');
@@ -50,10 +53,16 @@ app.use('/api', (req, res, next) => {
   next();
 });
 
-// Basic rate limiting on auth endpoints — brute-force / credential-stuffing
-// mitigation. Tune per your traffic once you have real numbers.
-const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 50 });
-app.use('/api/auth', authLimiter, authRoutes);
+// Auth routes apply their own limits so repeated login attempts cannot block
+// password recovery for every user behind the same proxy.
+app.set('trust proxy', 1);
+app.set('etag', 'strong');
+app.set('x-powered-by', false);
+app.use((req, res, next) => {
+  req.setTimeout(Number(process.env.REQUEST_TIMEOUT_MS || 30000));
+  next();
+});
+app.use('/api/auth', authRoutes);
 
 app.use('/api/products', productRoutes);
 app.use('/api/inventory', inventoryRoutes);

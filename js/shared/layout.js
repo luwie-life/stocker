@@ -1,5 +1,5 @@
 import { logout } from '../auth/guard.js';
-import { api } from '../api/client.js';
+import { api, getOfflineQueueCount } from '../api/client.js';
 
 const NAV_ITEMS = [
   { href: 'index.html', label: 'Dashboard', icon: '01' },
@@ -32,6 +32,21 @@ export function renderShell(session, activeHref) {
   }
   if (topbarBusiness) topbarBusiness.textContent = session.business.name;
   if (topbarUser) topbarUser.textContent = `${session.user.fullName} · ${session.role}`;
+  const connectionBanner = document.createElement('div');
+  connectionBanner.className = 'connection-banner';
+  document.querySelector('.main-content')?.prepend(connectionBanner);
+  const updateConnection = async () => {
+    const pending = await getOfflineQueueCount().catch(() => 0);
+    connectionBanner.textContent = navigator.onLine
+      ? (pending ? `${pending} activity item${pending === 1 ? '' : 's'} syncing…` : '')
+      : 'You are offline. Sales and stock changes will sync when the connection returns.';
+    connectionBanner.classList.toggle('is-visible', !navigator.onLine || pending > 0);
+    connectionBanner.classList.toggle('is-offline', !navigator.onLine);
+  };
+  window.addEventListener('online', updateConnection);
+  window.addEventListener('offline', updateConnection);
+  window.addEventListener('stocker:sync-status', updateConnection);
+  updateConnection();
   if (session.subscription && !document.querySelector('.subscription-banner')) {
     const banner = document.createElement('div');
     const endsAt = session.subscription.status === 'TRIAL' ? session.subscription.trialEndsAt : session.subscription.accessEndsAt;

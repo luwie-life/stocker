@@ -7,12 +7,18 @@ const refundService = require('../services/refundService');
 
 const create = asyncHandler(async (req, res) => {
   const { cart, payments, customer } = req.body;
+  const clientRequestId = req.body.clientRequestId || req.get('X-Idempotency-Key');
   const branchId = req.body.branchId || req.branch?._id;
   if (!branchId) throw new AppError('No branch specified or assigned for this sale.', 400, 'NO_BRANCH');
 
   const Branch = require('../models/Branch');
   const branch = await Branch.findOne({ _id: branchId, business: req.business._id });
   if (!branch) throw new AppError('Branch not found.', 404, 'BRANCH_NOT_FOUND');
+
+  if (clientRequestId) {
+    const existing = await Sale.findOne({ business: req.business._id, clientRequestId });
+    if (existing) return ok(res, existing);
+  }
 
   const sale = await saleService.createSale({
     business: req.business,
@@ -21,6 +27,7 @@ const create = asyncHandler(async (req, res) => {
     cart,
     payments,
     customer,
+    clientRequestId,
     allowNegativeStock: req.business.settings.negativeStockAllowed,
   });
 

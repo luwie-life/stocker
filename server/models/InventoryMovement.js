@@ -20,8 +20,10 @@ const inventoryMovementSchema = new mongoose.Schema({
   reference: { type: String },
   reason: { type: String },
   performedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  clientRequestId: { type: String, trim: true },
 }, { timestamps: true });
 
 inventoryMovementSchema.index({ business: 1, product: 1, branch: 1, createdAt: -1 });
+inventoryMovementSchema.index({ business: 1, clientRequestId: 1 }, { unique: true, sparse: true });
 
 module.exports = mongoose.model('InventoryMovement', inventoryMovementSchema);

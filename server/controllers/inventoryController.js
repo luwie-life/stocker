@@ -34,7 +34,11 @@ const movements = asyncHandler(async (req, res) => {
 
 // Manual add/remove — e.g. opening stock, purchase receipt, damage write-off.
 const adjust = asyncHandler(async (req, res) => {
-  const { branchId, productId, quantity, type, reason } = req.body;
+  const { branchId, productId, quantity, type, reason, clientRequestId } = req.body;
+  if (clientRequestId) {
+    const existingMovement = await InventoryMovement.findOne({ business: req.business._id, clientRequestId });
+    if (existingMovement) return ok(res, { queuedReplay: true, movement: existingMovement });
+  }
   const [branch, product] = await Promise.all([
     Branch.findOne({ _id: branchId, business: req.business._id }),
     Product.findOne({ _id: productId, business: req.business._id, status: 'ACTIVE' }),
@@ -54,6 +58,7 @@ const adjust = asyncHandler(async (req, res) => {
         type,
         reason,
         performedBy: req.user._id,
+        clientRequestId,
         session,
         allowNegative: req.business.settings.negativeStockAllowed,
       });

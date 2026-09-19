@@ -70,6 +70,8 @@ loginForm.addEventListener('submit', async (e) => {
       setSession(res.data.token);
       if (res.data.isPlatformAdmin) {
         location.href = 'platform-admin.html';
+      } else if (res.data.isAmbassador) {
+        location.href = 'ambassador.html';
       } else {
         location.href = 'index.html';
       }

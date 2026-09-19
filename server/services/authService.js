@@ -150,10 +150,13 @@ async function login({ email, password }) {
   await user.save();
 
   const token = signToken(user._id);
+  const ambassador = await Ambassador.findOne({ user: user._id }).select('_id status').lean();
   return {
     token,
     user: { id: user._id, email: user.email, fullName: user.fullName, platformRole: user.platformRole || null },
     isPlatformAdmin: Boolean(user.platformRole),
+    isAmbassador: Boolean(ambassador),
+    ambassadorStatus: ambassador?.status || null,
   };
 }
 

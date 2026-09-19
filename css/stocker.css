@@ -90,6 +90,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .topbar-meta { color: var(--muted); font-size: 0.78rem; }
 .topbar-actions { display: flex; align-items: center; gap: 12px; }
 .subscription-banner { display: flex; justify-content: space-between; gap: 14px; align-items: center; padding: 12px 15px; margin-bottom: 22px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: #FFFDF8; color: var(--text); font-size: .78rem; }
+.connection-banner { display: none; padding: 9px 13px; margin-bottom: 14px; border-radius: var(--radius); background: #FFF7E8; border: 1px solid #E9C98B; color: var(--warning); font-size: .78rem; }.connection-banner.is-visible { display: block; }.connection-banner.is-offline { background: #FFF3F1; border-color: #E8B2A8; color: var(--danger); }
 .subscription-banner span:last-child { color: var(--muted); }.subscription-urgent { border-color: #E8B2A8; background: #FFF5F3; }.subscription-urgent strong { color: var(--danger); }
 .notification-bell { position: relative; width: 38px; height: 38px; border: 1px solid var(--border); border-radius: 50%; background: var(--white); color: var(--danger); cursor: pointer; box-shadow: var(--shadow); }
 .notification-bell > span { display: inline-grid; place-items: center; width: 18px; height: 18px; border: 2px solid currentColor; border-radius: 50%; font-size: .7rem; font-weight: 800; }

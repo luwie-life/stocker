@@ -17,7 +17,7 @@ function buildSaleNumber(businessId, seq) {
 // Every step runs inside one MongoDB transaction. If ANY step fails
 // (insufficient stock, bad price, payment mismatch), the whole thing rolls
 // back — a sale can never be left half-completed.
-async function createSale({ business, branch, cashierMembership, cart, payments, customer, allowNegativeStock }) {
+async function createSale({ business, branch, cashierMembership, cart, payments, customer, clientRequestId, allowNegativeStock }) {
   if (!cart || cart.length === 0) {
     throw new AppError('Cart is empty.', 400, 'EMPTY_CART');
   }
@@ -99,6 +99,7 @@ async function createSale({ business, branch, cashierMembership, cart, payments,
           balanceMinor,
           paymentStatus,
           currency: business.currency,
+          clientRequestId,
         }],
         { session }
       );
