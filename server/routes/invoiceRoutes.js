@@ -1,0 +1,12 @@
+const express = require('express');
+const authenticate = require('../middleware/authenticate');
+const resolveTenant = require('../middleware/resolveTenant');
+const requirePermission = require('../middleware/requirePermission');
+const { PERMISSIONS } = require('../config/permissions');
+const controller = require('../controllers/invoiceController');
+const router = express.Router();
+router.use(authenticate, resolveTenant);
+router.get('/', requirePermission(PERMISSIONS.SALES_VIEW), controller.list);
+router.get('/:id', requirePermission(PERMISSIONS.SALES_VIEW), controller.getOne);
+router.post('/', requirePermission(PERMISSIONS.SALES_VIEW), controller.create);
+module.exports = router;

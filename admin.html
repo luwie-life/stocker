@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — stocker</title>
+<link rel="stylesheet" href="css/stocker.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <main class="main-content">
+    <div class="topbar">
+      <div><div class="topbar-business" id="topbar-business">—</div><div class="topbar-meta" id="topbar-user">—</div></div>
+      <div class="topbar-actions"><button class="btn btn-secondary" id="logout-btn">Sign out</button></div>
+    </div>
+    <h1 class="page-heading">Admin workspace</h1>
+    <p class="page-intro">A live view of your catalogue, locations, and recent activity.</p>
+    <div id="admin-content"><div class="empty-state">Loading workspace…</div></div>
+  </main>
+</div>
+<script type="module" src="js/admin/admin.js"></script>
+</body>
+</html>

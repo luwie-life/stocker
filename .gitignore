@@ -1,0 +1,50 @@
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+server/.env
+server/.env.*
+!server/.env.example
+
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Logs and runtime output
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+
+# Coverage and build output
+coverage/
+dist/
+build/
+.tmp/
+.cache/
+
+# Local tooling and editor files
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Local test artifacts
+playwright-report/
+test-results/
+
+# Firebase local emulator data
+.firebase/
+
+# OS-specific metadata
+desktop.ini

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>stocker — Sign in</title>
+<link rel="stylesheet" href="css/stocker.css">
+</head>
+<body>
+<div class="centered-shell">
+  <div class="card" style="width:380px;max-width:100%">
+    <a class="wordmark" href="home.html" style="display:block;text-align:center;margin-bottom:4px;text-decoration:none">stocker</a>
+    <p style="text-align:center;color:var(--muted);font-size:0.85rem;margin-top:0;margin-bottom:24px">
+      Your retail business, running itself.
+    </p>
+
+    <div style="display:flex;gap:8px;margin-bottom:20px">
+      <button class="btn btn-secondary" id="tab-login" style="flex:1">Sign in</button>
+      <button class="btn btn-secondary" id="tab-register" style="flex:1">Start free trial</button>
+    </div>
+
+    <form id="login-form">
+      <div class="field">
+        <label>Email</label>
+        <input id="login-email" type="email" required autocomplete="username"/>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="login-password" type="password" required autocomplete="current-password"/>
+      </div>
+      <button class="btn btn-primary btn-block" id="login-btn" type="submit">Sign in</button>
+      <a class="auth-help-link" href="forgot-password.html">Forgot password?</a>
+    </form>
+
+    <form id="register-form" style="display:none">
+      <div class="field">
+        <label>Your full name</label>
+        <input id="reg-fullName" required/>
+      </div>
+      <div class="field">
+        <label>Account type</label>
+        <select id="reg-accountType">
+          <option value="BUSINESS">Business owner</option>
+          <option value="AMBASSADOR">Ambassador</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input id="reg-email" type="email" required/>
+      </div>
+      <div class="field">
+        <label>Password (min. 8 characters)</label>
+        <input id="reg-password" type="password" minlength="8" required/>
+      </div>
+      <div class="field">
+        <label>Phone</label>
+        <input id="reg-phone" autocomplete="tel"/>
+      </div>
+      <div id="business-fields">
+        <div class="field">
+          <label>Business name</label>
+          <input id="reg-businessName"/>
+        </div>
+        <div class="field">
+          <label>Business type</label>
+          <select id="reg-businessType">
+            <option value="RETAIL">Retail shop</option>
+            <option value="SUPERMARKET">Supermarket</option>
+            <option value="PHARMACY">Pharmacy</option>
+            <option value="WHOLESALE">Wholesale</option>
+            <option value="DISTRIBUTION">Distribution</option>
+            <option value="OTHER">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="ambassador-fields" style="display:none">
+        <div class="field">
+          <label>Location</label>
+          <input id="amb-location" placeholder="City / State / Country"/>
+        </div>
+        <div class="field">
+          <label>Marketing experience</label>
+          <textarea id="amb-experience" rows="3" placeholder="What audience or channel experience do you bring?"></textarea>
+        </div>
+        <div class="field">
+          <label>Audience / reach</label>
+          <textarea id="amb-audience" rows="3" placeholder="Tell us who you can reach or influence."></textarea>
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea id="amb-note" rows="3" placeholder="Anything else you want the platform team to know?"></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Referral code (optional)</label>
+        <input id="reg-referralCode" placeholder="e.g. ALICE-2F3A"/>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="register-btn" type="submit">Start 7-day free trial</button>
+    </form>
+    <a href="home.html" style="display:block;text-align:center;color:var(--muted);font-size:.78rem;margin-top:20px">Learn more about stocker</a>
+  </div>
+</div>
+<script type="module" src="js/auth/login.js"></script>
+</body>
+</html>

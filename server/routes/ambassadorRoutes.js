@@ -1,0 +1,11 @@
+const express = require('express');
+const authenticate = require('../middleware/authenticate');
+const requireAmbassador = require('../middleware/requireAmbassador');
+const controller = require('../controllers/ambassadorController');
+const router = express.Router();
+router.use(authenticate, requireAmbassador);
+router.get('/me', controller.me);
+router.get('/me/referrals', controller.referrals);
+router.get('/me/messages', controller.messages);
+router.post('/me/messages', controller.sendMessage);
+module.exports = router;
