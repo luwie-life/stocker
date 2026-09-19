@@ -22,14 +22,22 @@ const billingWebhookRoutes = require('./routes/billingWebhookRoutes');
 const marketingRoutes = require('./routes/marketingRoutes');
 
 const app = express();
-const allowedOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(',').map((origin) => origin.trim().replace(/\/$/, ''))
-  : ['https://stocker-saas.vercel.app', 'http://localhost:5500', 'http://127.0.0.1:5500'];
+const configuredOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(',').map((origin) => origin.trim().replace(/\/$/, '')).filter(Boolean)
+  : [];
+const allowedOrigins = new Set([
+  'https://stocker-saas.vercel.app',
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  ...configuredOrigins,
+]);
 
 app.use(helmet());
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ''))) return callback(null, true);
+    const normalizedOrigin = origin?.replace(/\/$/, '');
+    const isVercelPreview = normalizedOrigin?.endsWith('.vercel.app');
+    if (!origin || allowedOrigins.has(normalizedOrigin) || isVercelPreview) return callback(null, true);
     return callback(new Error('Origin is not allowed by CORS'));
   },
   credentials: true,
