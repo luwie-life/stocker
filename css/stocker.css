@@ -261,3 +261,31 @@ tr:last-child td { border-bottom: none; }
   .receipt-content { position: absolute; inset: 0; width: 80mm !important; max-width: 80mm !important; max-height: none; overflow: visible; border: 0; box-shadow: none; }
   .receipt-content .btn { display: none; }
 }
+.pos-search-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.pos-search-row .pos-search {
+  flex: 1;
+  min-width: 0;
+}
+
+.pos-search-btn {
+  flex-shrink: 0;
+  min-width: 96px;
+}
+
+@media (max-width: 600px) {
+  .pos-search-row {
+    gap: 8px;
+  }
+
+  .pos-search-btn {
+    min-width: 82px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
