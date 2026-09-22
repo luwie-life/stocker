@@ -9,26 +9,68 @@
 <body>
 <div class="app-shell">
   <aside class="sidebar" id="sidebar"></aside>
+
   <main class="main-content">
     <div class="topbar">
       <div>
         <div class="topbar-business" id="topbar-business">—</div>
         <div class="topbar-meta" id="topbar-user">—</div>
       </div>
-      <div class="topbar-actions"><button class="btn btn-secondary" id="logout-btn">Sign out</button></div>
+
+      <div class="topbar-actions">
+        <button
+          class="btn btn-secondary"
+          id="logout-btn"
+        >
+          Sign out
+        </button>
+      </div>
     </div>
 
-    <h1 class="page-heading">Good morning</h1>
-    <p class="page-intro">Here is the pulse of your business today.</p>
+    <h1
+      class="page-heading"
+      id="dashboard-greeting"
+    >
+      Welcome
+    </h1>
 
-    <div id="stats-grid" class="stats-grid"></div>
+    <p class="page-intro">
+      Here is the pulse of your business today.
+    </p>
+
+    <div
+      id="stats-grid"
+      class="stats-grid"
+    ></div>
 
     <div class="card">
-      <div class="section-header"><div><h2 class="card-title">Recent sales</h2><p class="card-subtitle">The latest activity across your workspace.</p></div><a class="btn btn-secondary" href="sales.html">Open POS</a></div>
+      <div class="section-header">
+        <div>
+          <h2 class="card-title">
+            Recent sales
+          </h2>
+
+          <p class="card-subtitle">
+            The latest activity across your workspace.
+          </p>
+        </div>
+
+        <a
+          class="btn btn-secondary"
+          href="sales.html"
+        >
+          Open POS
+        </a>
+      </div>
+
       <div id="recent-sales"></div>
     </div>
   </main>
 </div>
-<script type="module" src="js/dashboard/dashboard.js"></script>
+
+<script
+  type="module"
+  src="js/dashboard/dashboard.js"
+></script>
 </body>
 </html>
