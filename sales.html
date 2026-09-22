@@ -9,21 +9,17 @@
 <body>
 <div class="app-shell">
   <aside class="sidebar" id="sidebar"></aside>
+
   <main class="main-content">
     <div class="topbar">
       <div>
         <div class="topbar-business" id="topbar-business">—</div>
-
-    <section class="card sales-history-card">
-      <div class="section-header">
-        <div><h2 class="card-title">Sales history</h2><p class="card-subtitle">Recent transactions recorded for this business.</p></div>
-        <button class="btn btn-secondary" id="refresh-sales-btn" type="button">Refresh</button>
-      </div>
-      <div id="sales-history"><div class="empty-state">Loading sales history…</div></div>
-    </section>
         <div class="topbar-meta" id="topbar-user">—</div>
       </div>
-      <div class="topbar-actions"><button class="btn btn-secondary" id="logout-btn">Sign out</button></div>
+
+      <div class="topbar-actions">
+        <button class="btn btn-secondary" id="logout-btn">Sign out</button>
+      </div>
     </div>
 
     <h1 class="page-heading">Point of sale</h1>
@@ -31,21 +27,45 @@
 
     <div class="pos-grid">
       <div class="card">
-        <input id="scan-input" placeholder="Scan barcode or search product, then press Enter…" autofocus
-          class="pos-search"/>
+        <div class="pos-search-row">
+          <input
+            id="scan-input"
+            placeholder="Scan barcode or search product…"
+            autofocus
+            class="pos-search"
+            autocomplete="off"
+          />
+
+          <button
+            class="btn btn-primary pos-search-btn"
+            id="search-product-btn"
+            type="button"
+          >
+            Search
+          </button>
+        </div>
+
         <div id="search-results"></div>
       </div>
 
       <div class="card cart-panel">
         <h2 class="card-title">Current sale</h2>
         <p class="card-subtitle">Review items before taking payment.</p>
+
         <div id="cart-lines"></div>
+
         <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px">
-          <div style="display:flex;justify-content:space-between;font-weight:600;font-size:1.1rem" id="cart-total">Total: —</div>
+          <div
+            style="display:flex;justify-content:space-between;font-weight:600;font-size:1.1rem"
+            id="cart-total"
+          >
+            Total: —
+          </div>
         </div>
 
         <div class="field" style="margin-top:16px">
           <label>Payment method</label>
+
           <select id="payment-method">
             <option value="CASH">Cash</option>
             <option value="TRANSFER">Transfer</option>
@@ -54,24 +74,78 @@
             <option value="CREDIT">Credit (pay later)</option>
           </select>
         </div>
+
         <div class="field">
           <label id="amount-received-label">Amount received</label>
-          <input id="amount-received" type="number" step="0.01" min="0"/>
+          <input
+            id="amount-received"
+            type="number"
+            step="0.01"
+            min="0"
+          />
         </div>
 
-        <button class="btn btn-primary btn-block" id="checkout-btn">Complete sale</button>
+        <button
+          class="btn btn-primary btn-block"
+          id="checkout-btn"
+        >
+          Complete sale
+        </button>
       </div>
     </div>
+
+    <section class="card sales-history-card">
+      <div class="section-header">
+        <div>
+          <h2 class="card-title">Sales history</h2>
+          <p class="card-subtitle">
+            Recent transactions recorded for this business.
+          </p>
+        </div>
+
+        <button
+          class="btn btn-secondary"
+          id="refresh-sales-btn"
+          type="button"
+        >
+          Refresh
+        </button>
+      </div>
+
+      <div id="sales-history">
+        <div class="empty-state">Loading sales history…</div>
+      </div>
+    </section>
   </main>
 </div>
 
 <!-- Receipt modal -->
-<div id="receipt-modal" style="display:none;position:fixed;inset:0;background:rgba(25,23,22,0.4);align-items:center;justify-content:center;z-index:500">
-  <div class="card receipt-content" style="width:360px;max-width:92vw">
+<div
+  id="receipt-modal"
+  style="display:none;position:fixed;inset:0;background:rgba(25,23,22,0.4);align-items:center;justify-content:center;z-index:500"
+>
+  <div
+    class="card receipt-content"
+    style="width:360px;max-width:92vw"
+  >
     <div id="receipt-body"></div>
+
     <div style="display:flex;gap:8px;margin-top:16px">
-      <button class="btn btn-secondary" style="flex:1" onclick="window.print()">Print</button>
-      <button class="btn btn-primary" style="flex:1" id="new-sale-btn">New sale</button>
+      <button
+        class="btn btn-secondary"
+        style="flex:1"
+        onclick="window.print()"
+      >
+        Print
+      </button>
+
+      <button
+        class="btn btn-primary"
+        style="flex:1"
+        id="new-sale-btn"
+      >
+        New sale
+      </button>
     </div>
   </div>
 </div>
