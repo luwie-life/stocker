@@ -23,9 +23,19 @@ const cartLinesEl = document.getElementById('cart-lines');
 const cartTotalEl = document.getElementById('cart-total');
 const amountReceivedInput = document.getElementById('amount-received');
 const salesHistoryEl = document.getElementById('sales-history');
+const paymentMethodInput = document.getElementById('payment-method');
 
 document.getElementById('amount-received-label').textContent =
   `Amount received (${currency})`;
+
+paymentMethodInput.addEventListener('change', () => {
+  const total = cartTotalMinor();
+
+  amountReceivedInput.value =
+    paymentMethodInput.value === 'CREDIT'
+      ? '0.00'
+      : (total / 100).toFixed(2);
+});
 
 let cart = [];
 
@@ -154,7 +164,9 @@ function renderCart() {
     `Total: ${formatMoney(cartTotalMinor(), currency)}`;
 
   amountReceivedInput.value =
-    (cartTotalMinor() / 100).toFixed(2);
+    paymentMethodInput.value === 'CREDIT'
+      ? '0.00'
+      : (cartTotalMinor() / 100).toFixed(2);
 }
 
 cartLinesEl.addEventListener('click', (e) => {
@@ -289,7 +301,7 @@ async function handleScanOrSearch() {
 
     if (fallback.length) {
       searchResults.innerHTML =
-        '<p class="search-status">Offline catalogue results. Confirm checkout when connection returns.</p>' +
+        '<p class="search-status">Offline catalogue results. Confirm checkout when the connection returns.</p>' +
         fallback
           .map(
             (p) => `
@@ -330,22 +342,17 @@ async function handleScanOrSearch() {
       `;
     }
 
-    showToast(err.message, 'error');
+    if (!fallback.length) {
+      showToast(err.message, 'error');
+    }
   }
 }
 
-/*
- * Search button.
- */
 searchProductBtn.addEventListener(
   'click',
   handleScanOrSearch
 );
 
-/*
- * Keep Enter support for barcode scanners
- * and keyboard users.
- */
 scanInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
@@ -377,7 +384,7 @@ document
     );
 
     const method =
-      document.getElementById('payment-method').value;
+      paymentMethodInput.value;
 
     await withButtonLoading(
       e.target,
@@ -476,7 +483,9 @@ function showReceipt(sale) {
         ${escapeHtml(sale.saleNumber)}
         ·
         ${escapeHtml(
-          new Date(sale.createdAt).toLocaleString()
+          new Date(
+            sale.createdAt
+          ).toLocaleString()
         )}
       </div>
     </div>
@@ -523,6 +532,7 @@ function showReceipt(sale) {
     <div class="receipt-summary">
       <div class="receipt-summary-row">
         <span>Subtotal</span>
+
         <strong>
           ${formatMoney(
             sale.subtotalMinor,
@@ -536,6 +546,7 @@ function showReceipt(sale) {
           ? `
             <div class="receipt-summary-row">
               <span>Discount</span>
+
               <strong>
                 -${formatMoney(
                   discountMinor,
@@ -549,6 +560,7 @@ function showReceipt(sale) {
 
       <div class="receipt-total">
         <span>Total</span>
+
         <strong>
           ${formatMoney(
             sale.totalMinor,
@@ -564,6 +576,7 @@ function showReceipt(sale) {
           ? `
             <div class="receipt-summary-row receipt-balance">
               <span>Balance due</span>
+
               <strong>
                 ${formatMoney(
                   sale.balanceMinor,
@@ -601,17 +614,20 @@ async function loadSalesHistory() {
     });
 
     if (res.data.length === 0) {
-      emptyState(salesHistoryEl, {
-        title: 'No sales yet',
-        message:
-          'Completed transactions will appear here for review and refunds.',
-      });
+      salesHistoryEl.innerHTML = `
+        <div class="empty-state">
+          <h3>No sales yet</h3>
+          <p>
+            Completed transactions will appear here for review and refunds.
+          </p>
+        </div>
+      `;
 
       return;
     }
 
     salesHistoryEl.innerHTML = `
-      <div class="table-wrap">
+      <div class="table-wrap mobile-cards">
         <table>
           <thead>
             <tr>
@@ -677,6 +693,30 @@ async function loadSalesHistory() {
         </table>
       </div>
     `;
+
+    const table =
+      salesHistoryEl.querySelector(
+        '.table-wrap.mobile-cards table'
+      );
+
+    if (table) {
+      const headers = Array.from(
+        table.querySelectorAll('thead th')
+      ).map((th) => th.textContent.trim());
+
+      table
+        .querySelectorAll('tbody tr')
+        .forEach((row) => {
+          Array.from(row.children).forEach(
+            (cell, index) => {
+              if (headers[index]) {
+                cell.dataset.label =
+                  headers[index];
+              }
+            }
+          );
+        });
+    }
   } catch (err) {
     salesHistoryEl.innerHTML = `
       <div class="empty-state">
@@ -688,7 +728,10 @@ async function loadSalesHistory() {
       </div>
     `;
 
-    showToast(err.message, 'error');
+    showToast(
+      err.message,
+      'error'
+    );
   }
 }
 
