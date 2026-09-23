@@ -103,43 +103,64 @@ function render(data, feedback, users, ambassadors, messages, businesses) {
 
                           <td>
                             <select
-                              class="business-plan"
-                              data-id="${business._id}"
-                            >
-                              <option
-                                value="STARTER"
-                                ${
-                                  business.subscription?.plan === 'STARTER'
-                                    ? 'selected'
-                                    : ''
-                                }
-                              >
-                                Starter · ₦15k
-                              </option>
+  class="business-plan"
+  data-id="${business._id}"
+>
+  <option
+    value="STARTER"
+    ${
+      business.subscription?.plan === 'STARTER'
+        ? 'selected'
+        : ''
+    }
+  >
+    Starter · ₦5,000/month
+  </option>
 
-                              <option
-                                value="GROWTH"
-                                ${
-                                  business.subscription?.plan === 'GROWTH'
-                                    ? 'selected'
-                                    : ''
-                                }
-                              >
-                                Growth · ₦25k
-                              </option>
+  <option
+    value="GROWTH"
+    ${
+      business.subscription?.plan === 'GROWTH'
+        ? 'selected'
+        : ''
+    }
+  >
+    Growth · ₦10,000/month
+  </option>
 
-                              <option
-                                value="CUSTOM"
-                                ${
-                                  business.subscription?.plan === 'CUSTOM'
-                                    ? 'selected'
-                                    : ''
-                                }
-                              >
-                                Custom
-                              </option>
-                            </select>
-                          </td>
+  <option
+    value="BUSINESS"
+    ${
+      business.subscription?.plan === 'BUSINESS'
+        ? 'selected'
+        : ''
+    }
+  >
+    Business · ₦15,000/month
+  </option>
+
+  <option
+    value="SCALE"
+    ${
+      business.subscription?.plan === 'SCALE'
+        ? 'selected'
+        : ''
+    }
+  >
+    Scale · ₦20,000/month
+  </option>
+
+  <option
+    value="CUSTOM"
+    ${
+      business.subscription?.plan === 'CUSTOM'
+        ? 'selected'
+        : ''
+    }
+  >
+    Custom · Contact team
+  </option>
+</select>                          </td>
 
                           <td>
                             <input
