@@ -9,11 +9,24 @@ const referralCode = new URLSearchParams(location.search).get('ref');
 
 async function redirectIfSessionIsValid() {
   if (!isLoggedIn()) return;
+
   try {
     const res = await api.get('/auth/session');
-    location.replace(res.data.isPlatformAdmin ? 'platform-admin.html' : 'index.html');
+
+    if (res.data.isPlatformAdmin) {
+      location.replace('platform-admin.html');
+      return;
+    }
+
+    if (res.data.isAmbassador) {
+      location.replace('ambassador.html');
+      return;
+    }
+
+    location.replace('index.html');
   } catch {
-    // The API client clears invalid sessions; keep the auth form visible.
+    // The API client clears invalid sessions.
+    // Keep the auth form visible.
   }
 }
 
