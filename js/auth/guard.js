@@ -23,6 +23,7 @@ export async function requireAuthenticatedSession() {
     location.replace('login.html');
     throw new Error('redirecting');
   }
+
   try {
     const res = await api.get('/auth/session');
     return res.data;
