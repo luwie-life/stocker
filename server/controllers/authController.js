@@ -24,12 +24,40 @@ const login = asyncHandler(async (req, res) => {
   return ok(res, result);
 });
 
-const session = asyncHandler(async (req, res) => {
-  return ok(res, {
-    user: { id: req.user._id, email: req.user.email, fullName: req.user.fullName, platformRole: req.user.platformRole || null },
-    isPlatformAdmin: Boolean(req.user.platformRole),
-  });
-});
+const session = asyncHandler(
+  async (req, res) => {
+    const Ambassador = require('../models/Ambassador');
+
+    const ambassador =
+      await Ambassador.findOne({
+        user: req.user._id,
+      })
+        .select('_id status referralCode')
+        .lean();
+
+    return ok(res, {
+      user: {
+        id: req.user._id,
+        email: req.user.email,
+        fullName: req.user.fullName,
+        platformRole:
+          req.user.platformRole || null,
+      },
+
+      isPlatformAdmin:
+        Boolean(req.user.platformRole),
+
+      isAmbassador:
+        Boolean(ambassador),
+
+      ambassadorStatus:
+        ambassador?.status || null,
+
+      ambassadorId:
+        ambassador?._id || null,
+    });
+  }
+);
 
 const me = asyncHandler(async (req, res) => {
   return ok(res, {
