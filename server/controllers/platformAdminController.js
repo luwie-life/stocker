@@ -611,16 +611,26 @@ const updateBusinessSubscription =
       business.subscription = {};
     }
 
+    const validPlans = [
+      'STARTER',
+      'GROWTH',
+      'BUSINESS',
+      'SCALE',
+      'CUSTOM',
+    ];
+
+    const validStatuses = [
+      'TRIAL',
+      'ACTIVE',
+      'PAUSED',
+    ];
+
     if (
       plan &&
-      ![
-        'STARTER',
-        'GROWTH',
-        'CUSTOM',
-      ].includes(plan)
+      !validPlans.includes(plan)
     ) {
       throw new AppError(
-        'Invalid plan.',
+        'Invalid Stocker plan.',
         400,
         'INVALID_PLAN'
       );
@@ -628,11 +638,7 @@ const updateBusinessSubscription =
 
     if (
       status &&
-      ![
-        'TRIAL',
-        'ACTIVE',
-        'PAUSED',
-      ].includes(status)
+      !validStatuses.includes(status)
     ) {
       throw new AppError(
         'Invalid subscription status.',
@@ -641,6 +647,15 @@ const updateBusinessSubscription =
       );
     }
 
+    /*
+     * Upgrade / downgrade:
+     * Changing the plan immediately changes the
+     * limits used by the application.
+     *
+     * We deliberately do not delete existing
+     * products, branches or staff when a business
+     * is downgraded.
+     */
     if (plan) {
       business.subscription.plan =
         plan;
@@ -670,6 +685,9 @@ const updateBusinessSubscription =
 
       business.subscription.status =
         'TRIAL';
+
+      business.subscription.trialStartedAt =
+        new Date();
 
       business.subscription.trialEndsAt =
         new Date(
@@ -718,7 +736,11 @@ const updateBusinessSubscription =
 
     await business.save();
 
-    return ok(res, business);
+    return ok(res, {
+      business,
+      plan: business.subscription.plan,
+      status: business.subscription.status,
+    });
   });
 
 module.exports = {
