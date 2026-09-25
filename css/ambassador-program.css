@@ -1,11 +1,11 @@
 /* =========================================================
    STOCKER AMBASSADOR PROGRAM
-   Premium Marketing Experience
+   Responsive Premium Marketing System
    ========================================================= */
 
-/* ---------------------------------------------------------
+/* =========================================================
    01. DESIGN TOKENS
-   --------------------------------------------------------- */
+   ========================================================= */
 
 :root {
   --stocker-brown: #6b4f3a;
@@ -48,13 +48,16 @@
 }
 
 
-/* ---------------------------------------------------------
-   02. RESET / FOUNDATION
-   --------------------------------------------------------- */
+/* =========================================================
+   02. RESET
+   ========================================================= */
 
 .ambassador-page {
   margin: 0;
   padding: 0;
+
+  width: 100%;
+  min-width: 0;
 
   background:
     radial-gradient(
@@ -105,38 +108,42 @@
 
 .ambassador-page img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    03. GLOBAL CONTAINER
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .ambassador-nav-inner,
 .ambassador-hero,
 .ambassador-section,
 .ambassador-footer-inner {
-  width: min(
-    calc(100% - 48px),
-    var(--container)
-  );
+  width:
+    min(
+      calc(100% - 48px),
+      var(--container)
+    );
 
   margin-inline: auto;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    04. NAVIGATION
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .ambassador-nav {
   position: sticky;
   top: 0;
   z-index: 1000;
 
+  width: 100%;
+
   background:
-    rgba(246, 243, 238, 0.76);
+    rgba(246, 243, 238, 0.78);
 
   border-bottom:
     1px solid rgba(21, 19, 17, 0.07);
@@ -157,11 +164,11 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 24px;
+  gap: 20px;
 }
 
 .ambassador-logo {
-  position: relative;
+  flex: 0 0 auto;
 
   display: inline-flex;
   align-items: center;
@@ -170,6 +177,7 @@
 
   font-size: 22px;
   font-weight: 800;
+
   letter-spacing: -0.075em;
 
   transition:
@@ -177,7 +185,6 @@
     transform 0.3s var(--ease);
 }
 
-/* Remove any old S logo box */
 .ambassador-logo-mark {
   display: none !important;
 }
@@ -188,9 +195,17 @@
 }
 
 .ambassador-nav-actions {
+  min-width: 0;
+
   display: flex;
   align-items: center;
-  gap: 12px;
+
+  gap: 10px;
+}
+
+.ambassador-login,
+.ambassador-nav-cta {
+  white-space: nowrap;
 }
 
 .ambassador-login {
@@ -200,7 +215,8 @@
   align-items: center;
   justify-content: center;
 
-  padding: 0 18px;
+  padding:
+    0 18px;
 
   color: var(--stocker-ink);
 
@@ -215,8 +231,11 @@
 }
 
 .ambassador-login:hover {
-  background: rgba(21, 19, 17, 0.06);
-  transform: translateY(-1px);
+  background:
+    rgba(21, 19, 17, 0.06);
+
+  transform:
+    translateY(-1px);
 }
 
 .ambassador-nav-cta {
@@ -229,10 +248,14 @@
   align-items: center;
   justify-content: center;
 
-  padding: 0 20px;
+  padding:
+    0 20px;
 
-  background: var(--stocker-ink);
-  color: var(--stocker-white) !important;
+  background:
+    var(--stocker-ink);
+
+  color:
+    var(--stocker-white) !important;
 
   border-radius: 999px;
 
@@ -251,7 +274,6 @@
   content: "";
 
   position: absolute;
-
   inset: 0;
 
   background:
@@ -270,7 +292,9 @@
 }
 
 .ambassador-nav-cta:hover {
-  transform: translateY(-2px);
+  transform:
+    translateY(-2px);
+
   box-shadow:
     0 14px 34px rgba(21, 19, 17, 0.20);
 }
@@ -281,9 +305,9 @@
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    05. HERO
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .ambassador-hero {
   position: relative;
@@ -291,32 +315,37 @@
   min-height: 720px;
 
   padding:
-    110px 0
-    125px;
+    clamp(80px, 10vw, 125px) 0
+    clamp(80px, 10vw, 125px);
 
   display: grid;
 
   grid-template-columns:
     minmax(0, 1.08fr)
-    minmax(340px, 0.72fr);
+    minmax(320px, 0.72fr);
 
   align-items: center;
 
-  gap: 90px;
+  gap:
+    clamp(45px, 7vw, 90px);
 }
-
-/* Large atmospheric glow */
 
 .ambassador-hero::before {
   content: "";
 
   position: absolute;
 
-  width: 600px;
-  height: 600px;
+  width:
+    clamp(300px, 45vw, 600px);
 
-  right: -180px;
-  top: -150px;
+  height:
+    clamp(300px, 45vw, 600px);
+
+  right:
+    clamp(-220px, -10vw, -100px);
+
+  top:
+    clamp(-180px, -10vw, -70px);
 
   border-radius: 50%;
 
@@ -340,6 +369,8 @@
 
   max-width: 700px;
 
+  min-width: 0;
+
   animation:
     heroContentIn 1s var(--ease) both;
 }
@@ -347,11 +378,13 @@
 .ambassador-eyebrow {
   display: inline-flex;
   align-items: center;
+
   gap: 10px;
 
   margin-bottom: 28px;
 
-  color: var(--stocker-brown);
+  color:
+    var(--stocker-brown);
 
   font-size: 11px;
   font-weight: 800;
@@ -366,7 +399,10 @@
   width: 28px;
   height: 1px;
 
-  background: var(--stocker-brown);
+  flex: 0 0 auto;
+
+  background:
+    var(--stocker-brown);
 }
 
 .ambassador-hero h1 {
@@ -374,20 +410,27 @@
 
   max-width: 820px;
 
-  color: var(--stocker-ink);
+  color:
+    var(--stocker-ink);
 
   font-size:
-    clamp(58px, 7vw, 108px);
+    clamp(52px, 7.2vw, 108px);
 
-  line-height: 0.94;
+  line-height:
+    0.94;
 
-  letter-spacing: -0.075em;
+  letter-spacing:
+    -0.075em;
 
   font-weight: 700;
+
+  overflow-wrap:
+    break-word;
 }
 
 .ambassador-hero h1 span {
-  color: var(--stocker-brown);
+  color:
+    var(--stocker-brown);
 }
 
 .ambassador-hero-copy {
@@ -396,14 +439,16 @@
   margin:
     34px 0 0;
 
-  color: var(--stocker-muted);
+  color:
+    var(--stocker-muted);
 
   font-size:
-    clamp(16px, 1.7vw, 19px);
+    clamp(15px, 1.7vw, 19px);
 
   line-height: 1.75;
 
-  letter-spacing: -0.015em;
+  letter-spacing:
+    -0.015em;
 }
 
 .ambassador-hero-actions {
@@ -442,8 +487,11 @@
 }
 
 .primary-ambassador-btn {
-  background: var(--stocker-ink);
-  color: var(--stocker-white) !important;
+  background:
+    var(--stocker-ink);
+
+  color:
+    var(--stocker-white) !important;
 
   box-shadow:
     0 14px 30px rgba(21, 19, 17, 0.14);
@@ -453,7 +501,6 @@
   content: "";
 
   position: absolute;
-
   inset: 0;
 
   background:
@@ -472,7 +519,9 @@
 }
 
 .primary-ambassador-btn:hover {
-  transform: translateY(-3px);
+  transform:
+    translateY(-3px);
+
   box-shadow:
     0 20px 40px rgba(21, 19, 17, 0.20);
 }
@@ -483,7 +532,8 @@
 }
 
 .secondary-ambassador-btn {
-  color: var(--stocker-ink);
+  color:
+    var(--stocker-ink);
 
   border:
     1px solid rgba(21, 19, 17, 0.12);
@@ -493,7 +543,8 @@
 }
 
 .secondary-ambassador-btn:hover {
-  background: var(--stocker-white);
+  background:
+    var(--stocker-white);
 
   transform:
     translateY(-3px);
@@ -506,7 +557,8 @@
   margin:
     20px 0 0;
 
-  color: var(--stocker-muted);
+  color:
+    var(--stocker-muted);
 
   font-size: 12px;
   font-weight: 600;
@@ -539,22 +591,23 @@
 
   font-size: 10px;
   font-weight: 700;
-
-  letter-spacing: 0.02em;
 }
 
 
-/* ---------------------------------------------------------
-   06. EARNINGS CARD
-   --------------------------------------------------------- */
+/* =========================================================
+   06. EARN CARD
+   ========================================================= */
 
 .earn-card {
   position: relative;
   z-index: 2;
 
-  padding: 34px;
+  width: 100%;
 
   min-height: 470px;
+
+  padding:
+    clamp(28px, 4vw, 34px);
 
   display: flex;
   flex-direction: column;
@@ -567,7 +620,8 @@
       #1d1713 100%
     );
 
-  color: var(--stocker-white);
+  color:
+    var(--stocker-white);
 
   border:
     1px solid rgba(255, 255, 255, 0.10);
@@ -590,8 +644,11 @@
 
   position: absolute;
 
-  width: 340px;
-  height: 340px;
+  width:
+    clamp(240px, 28vw, 340px);
+
+  height:
+    clamp(240px, 28vw, 340px);
 
   right: -150px;
   top: -150px;
@@ -622,7 +679,8 @@
   background:
     rgba(107, 79, 58, 0.26);
 
-  filter: blur(12px);
+  filter:
+    blur(12px);
 }
 
 .earn-card > * {
@@ -638,16 +696,16 @@
   font-weight: 800;
 
   letter-spacing: 0.15em;
-  text-transform: uppercase;
 }
 
 .earn-card-number {
   margin-top: 12px;
 
-  color: var(--stocker-white);
+  color:
+    var(--stocker-white);
 
   font-size:
-    clamp(76px, 8vw, 118px);
+    clamp(72px, 8vw, 118px);
 
   line-height: 0.95;
 
@@ -666,6 +724,7 @@
     rgba(255, 255, 255, 0.70);
 
   font-size: 14px;
+
   line-height: 1.7;
 }
 
@@ -722,7 +781,8 @@
 }
 
 .earn-example-result strong {
-  color: var(--stocker-white);
+  color:
+    var(--stocker-white);
 
   font-size: 14px;
 }
@@ -735,11 +795,13 @@
 }
 
 .earn-example-result.highlight strong {
-  color: #ffffff;
+  color:
+    #ffffff;
 
   font-size: 18px;
 
-  letter-spacing: -0.03em;
+  letter-spacing:
+    -0.03em;
 }
 
 .earn-disclaimer {
@@ -751,25 +813,27 @@
     rgba(255, 255, 255, 0.42);
 
   font-size: 10px;
+
   line-height: 1.6;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    07. GENERAL SECTIONS
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .ambassador-section {
   position: relative;
 
   padding:
-    130px 0;
+    clamp(85px, 11vw, 130px) 0;
 }
 
 .section-heading {
   max-width: 760px;
 
-  margin-bottom: 65px;
+  margin-bottom:
+    clamp(45px, 6vw, 65px);
 }
 
 .section-kicker {
@@ -777,7 +841,8 @@
 
   margin-bottom: 18px;
 
-  color: var(--stocker-brown);
+  color:
+    var(--stocker-brown);
 
   font-size: 10px;
   font-weight: 800;
@@ -789,16 +854,21 @@
 .section-heading h2 {
   margin: 0;
 
-  color: var(--stocker-ink);
+  color:
+    var(--stocker-ink);
 
   font-size:
-    clamp(42px, 5vw, 72px);
+    clamp(40px, 5vw, 72px);
 
   line-height: 1.02;
 
-  letter-spacing: -0.065em;
+  letter-spacing:
+    -0.065em;
 
   font-weight: 700;
+
+  overflow-wrap:
+    break-word;
 }
 
 .section-heading p {
@@ -807,17 +877,19 @@
   margin:
     24px 0 0;
 
-  color: var(--stocker-muted);
+  color:
+    var(--stocker-muted);
 
-  font-size: 16px;
+  font-size:
+    clamp(14px, 1.4vw, 16px);
 
   line-height: 1.8;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    08. FEATURE GRID
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .ambassador-grid {
   display: grid;
@@ -833,6 +905,8 @@
 
   min-height: 330px;
 
+  min-width: 0;
+
   padding: 28px;
 
   display: flex;
@@ -846,9 +920,6 @@
 
   background:
     rgba(255, 255, 255, 0.58);
-
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.7) inset;
 
   overflow: hidden;
 
@@ -899,7 +970,8 @@
 }
 
 .feature-number {
-  margin-bottom: auto;
+  margin-bottom:
+    auto;
 
   color:
     rgba(107, 79, 58, 0.38);
@@ -911,21 +983,25 @@
 }
 
 .ambassador-feature-card h3 {
-  margin: 0 0 10px;
+  margin:
+    0 0 10px;
 
-  color: var(--stocker-ink);
+  color:
+    var(--stocker-ink);
 
   font-size: 20px;
 
   line-height: 1.2;
 
-  letter-spacing: -0.035em;
+  letter-spacing:
+    -0.035em;
 }
 
 .ambassador-feature-card p {
   margin: 0;
 
-  color: var(--stocker-muted);
+  color:
+    var(--stocker-muted);
 
   font-size: 13px;
 
@@ -933,15 +1009,21 @@
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    09. DARK STORY SECTION
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .ambassador-section-dark {
   width: 100%;
 
   padding:
-    140px max(24px, calc((100vw - var(--container)) / 2));
+    clamp(90px, 11vw, 140px)
+    max(
+      24px,
+      calc(
+        (100vw - var(--container)) / 2
+      )
+    );
 
   background:
     radial-gradient(
@@ -955,7 +1037,8 @@
       #0e0d0c
     );
 
-  color: var(--stocker-white);
+  color:
+    var(--stocker-white);
 
   overflow: hidden;
 }
@@ -987,7 +1070,8 @@
 }
 
 .section-heading-light h2 {
-  color: var(--stocker-white);
+  color:
+    var(--stocker-white);
 }
 
 .section-heading-light p {
@@ -1021,6 +1105,7 @@
 .step-item {
   position: relative;
 
+  min-width: 0;
   min-height: 310px;
 
   padding:
@@ -1048,7 +1133,8 @@
 }
 
 .step-number {
-  margin-bottom: 105px;
+  margin-bottom:
+    105px;
 
   color:
     rgba(255, 255, 255, 0.35);
@@ -1056,17 +1142,21 @@
   font-size: 11px;
   font-weight: 800;
 
-  letter-spacing: 0.08em;
+  letter-spacing:
+    0.08em;
 }
 
 .step-item h3 {
-  margin: 0 0 10px;
+  margin:
+    0 0 10px;
 
-  color: var(--stocker-white);
+  color:
+    var(--stocker-white);
 
   font-size: 19px;
 
-  letter-spacing: -0.03em;
+  letter-spacing:
+    -0.03em;
 }
 
 .step-item p {
@@ -1081,9 +1171,9 @@
 }
 
 
-/* ---------------------------------------------------------
-   10. INTERACTIVE JOIN GUIDE
-   --------------------------------------------------------- */
+/* =========================================================
+   10. JOIN GUIDE
+   ========================================================= */
 
 .join-guide-section {
   background:
@@ -1098,12 +1188,13 @@
   display: grid;
 
   grid-template-columns:
-    1fr
-    300px;
+    minmax(0, 1fr)
+    minmax(230px, 300px);
 
   align-items: end;
 
-  gap: 70px;
+  gap:
+    clamp(35px, 7vw, 70px);
 
   margin-bottom: 60px;
 }
@@ -1127,11 +1218,13 @@
   font-size: 10px;
   font-weight: 800;
 
-  letter-spacing: 0.14em;
+  letter-spacing:
+    0.14em;
 }
 
 .join-progress-label strong {
-  color: var(--stocker-ink);
+  color:
+    var(--stocker-ink);
 }
 
 .join-progress-track {
@@ -1185,6 +1278,8 @@
 }
 
 .join-step-list {
+  min-width: 0;
+
   padding: 14px;
 
   border-right:
@@ -1198,6 +1293,8 @@
   position: relative;
 
   width: 100%;
+
+  min-width: 0;
 
   padding:
     20px 18px;
@@ -1218,9 +1315,11 @@
   border-radius:
     16px;
 
-  background: transparent;
+  background:
+    transparent;
 
-  color: var(--stocker-ink);
+  color:
+    var(--stocker-ink);
 
   cursor: pointer;
 
@@ -1252,12 +1351,12 @@
 }
 
 .join-step-number {
+  width: 34px;
+  height: 34px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-
-  width: 34px;
-  height: 34px;
 
   border:
     1px solid rgba(21, 19, 17, 0.10);
@@ -1329,10 +1428,11 @@
 .join-detail {
   position: relative;
 
+  min-width: 0;
   min-height: 100%;
 
   padding:
-    60px 60px;
+    clamp(45px, 6vw, 60px);
 
   display: flex;
   flex-direction: column;
@@ -1349,8 +1449,11 @@
 .join-detail-number {
   position: absolute;
 
-  right: 38px;
-  top: 28px;
+  right:
+    clamp(20px, 4vw, 38px);
+
+  top:
+    clamp(18px, 3vw, 28px);
 
   color:
     rgba(107, 79, 58, 0.13);
@@ -1362,7 +1465,10 @@
 
   font-weight: 800;
 
-  letter-spacing: -0.08em;
+  letter-spacing:
+    -0.08em;
+
+  pointer-events: none;
 }
 
 .join-detail-content {
@@ -1370,6 +1476,8 @@
   z-index: 2;
 
   max-width: 600px;
+
+  min-width: 0;
 
   animation:
     detailIn 0.55s var(--ease);
@@ -1386,7 +1494,8 @@
   font-size: 10px;
   font-weight: 800;
 
-  letter-spacing: 0.14em;
+  letter-spacing:
+    0.14em;
 }
 
 .join-detail h3 {
@@ -1398,9 +1507,11 @@
   font-size:
     clamp(34px, 4vw, 54px);
 
-  line-height: 1.02;
+  line-height:
+    1.02;
 
-  letter-spacing: -0.06em;
+  letter-spacing:
+    -0.06em;
 }
 
 .join-detail p {
@@ -1440,7 +1551,8 @@
 
   font-size: 9px;
 
-  letter-spacing: 0.14em;
+  letter-spacing:
+    0.14em;
 }
 
 .join-tip span {
@@ -1522,23 +1634,24 @@
 }
 
 
-/* ---------------------------------------------------------
-   11. REQUIREMENTS SECTION
-   --------------------------------------------------------- */
+/* =========================================================
+   11. REQUIREMENTS
+   ========================================================= */
 
 .requirements {
   display: grid;
 
   grid-template-columns:
-    1fr
-    1fr;
+    minmax(0, 1fr)
+    minmax(0, 1fr);
 
-  gap: 90px;
+  gap:
+    clamp(45px, 8vw, 90px);
 
   align-items: center;
 
   padding:
-    70px;
+    clamp(38px, 6vw, 70px);
 
   border:
     1px solid rgba(21, 19, 17, 0.09);
@@ -1561,10 +1674,6 @@
   max-width: 560px;
 }
 
-.requirements-content .section-kicker {
-  margin-bottom: 18px;
-}
-
 .requirements-content h2 {
   margin: 0;
 
@@ -1574,9 +1683,11 @@
   font-size:
     clamp(38px, 5vw, 64px);
 
-  line-height: 1.02;
+  line-height:
+    1.02;
 
-  letter-spacing: -0.065em;
+  letter-spacing:
+    -0.065em;
 }
 
 .requirements-content p {
@@ -1588,7 +1699,8 @@
 
   font-size: 14px;
 
-  line-height: 1.8;
+  line-height:
+    1.8;
 }
 
 .requirements-list {
@@ -1602,7 +1714,7 @@
 
   grid-template-columns:
     38px
-    1fr;
+    minmax(0, 1fr);
 
   gap: 16px;
 
@@ -1675,24 +1787,30 @@
 
   font-size: 12px;
 
-  line-height: 1.6;
+  line-height:
+    1.6;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    12. DASHBOARD SECTION
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .ambassador-dashboard-section {
   display: grid;
 
   grid-template-columns:
-    minmax(300px, 0.72fr)
+    minmax(280px, 0.72fr)
     minmax(0, 1.28fr);
 
-  gap: 90px;
+  gap:
+    clamp(50px, 8vw, 90px);
 
   align-items: center;
+}
+
+.dashboard-preview-content {
+  min-width: 0;
 }
 
 .dashboard-preview-content .section-heading {
@@ -1710,7 +1828,7 @@
 
   grid-template-columns:
     44px
-    1fr;
+    minmax(0, 1fr);
 
   gap: 16px;
 
@@ -1754,7 +1872,8 @@
 
   font-size: 14px;
 
-  letter-spacing: -0.02em;
+  letter-spacing:
+    -0.02em;
 }
 
 .dashboard-feature p {
@@ -1766,22 +1885,29 @@
 
   font-size: 12px;
 
-  line-height: 1.65;
+  line-height:
+    1.65;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    13. DASHBOARD MOCKUP
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .dashboard-mockup {
   position: relative;
+
+  width: 100%;
+
+  min-width: 0;
 
   perspective: 1200px;
 }
 
 .mockup-window {
   position: relative;
+
+  width: 100%;
 
   border:
     1px solid rgba(21, 19, 17, 0.13);
@@ -1834,6 +1960,7 @@
 
 .mockup-dots {
   display: flex;
+
   gap: 5px;
 }
 
@@ -1848,16 +1975,13 @@
 }
 
 .mockup-title {
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
 
   color:
     #77716a;
 
   font-size: 9px;
   font-weight: 700;
-
-  letter-spacing: 0.03em;
 }
 
 .mockup-body {
@@ -1867,10 +1991,12 @@
 
   grid-template-columns:
     145px
-    1fr;
+    minmax(0, 1fr);
 }
 
 .mockup-sidebar {
+  min-width: 0;
+
   padding:
     22px 12px;
 
@@ -1891,26 +2017,25 @@
   font-size: 15px;
   font-weight: 800;
 
-  letter-spacing: -0.06em;
+  letter-spacing:
+    -0.06em;
 }
 
 .mockup-sidebar-item {
   padding:
     10px 11px;
 
-  margin-bottom: 4px;
+  margin-bottom:
+    4px;
 
-  border-radius: 8px;
+  border-radius:
+    8px;
 
   color:
     #817a72;
 
   font-size: 10px;
   font-weight: 700;
-
-  transition:
-    background 0.3s ease,
-    color 0.3s ease;
 }
 
 .mockup-sidebar-item.active {
@@ -1922,8 +2047,10 @@
 }
 
 .mockup-main {
+  min-width: 0;
+
   padding:
-    30px;
+    clamp(20px, 3vw, 30px);
 }
 
 .mockup-welcome span {
@@ -1933,7 +2060,8 @@
   font-size: 8px;
   font-weight: 800;
 
-  letter-spacing: 0.14em;
+  letter-spacing:
+    0.14em;
 }
 
 .mockup-welcome h3 {
@@ -1943,23 +2071,28 @@
   color:
     var(--stocker-ink);
 
-  font-size: 24px;
+  font-size:
+    clamp(20px, 2.5vw, 24px);
 
-  line-height: 1.1;
+  line-height:
+    1.1;
 
-  letter-spacing: -0.045em;
+  letter-spacing:
+    -0.045em;
 }
 
 .mockup-stat-grid {
   display: grid;
 
   grid-template-columns:
-    repeat(3, 1fr);
+    repeat(3, minmax(0, 1fr));
 
   gap: 8px;
 }
 
 .mockup-stat {
+  min-width: 0;
+
   padding:
     17px;
 
@@ -1988,9 +2121,11 @@
   color:
     var(--stocker-ink);
 
-  font-size: 20px;
+  font-size:
+    clamp(15px, 2vw, 20px);
 
-  letter-spacing: -0.05em;
+  letter-spacing:
+    -0.05em;
 }
 
 .mockup-referral {
@@ -2017,11 +2152,16 @@
   font-size: 8px;
   font-weight: 800;
 
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing:
+    0.08em;
+
+  text-transform:
+    uppercase;
 }
 
 .mockup-link {
+  min-width: 0;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2047,6 +2187,8 @@
 }
 
 .mockup-link button {
+  flex: 0 0 auto;
+
   padding:
     6px 10px;
 
@@ -2061,16 +2203,15 @@
 
   font-size: 8px;
   font-weight: 800;
-
-  cursor: default;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    14. FAQ
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .faq-list {
+  width: 100%;
   max-width: 900px;
 
   margin-inline: auto;
@@ -2105,9 +2246,6 @@
   font-weight: 800;
 
   cursor: pointer;
-
-  transition:
-    color 0.3s ease;
 }
 
 .faq-list summary::-webkit-details-marker {
@@ -2115,7 +2253,8 @@
 }
 
 .faq-list summary span {
-  flex: 0 0 auto;
+  flex:
+    0 0 auto;
 
   width: 30px;
   height: 30px;
@@ -2133,7 +2272,6 @@
     var(--stocker-brown);
 
   font-size: 18px;
-  font-weight: 400;
 
   transition:
     transform 0.4s var(--ease),
@@ -2164,36 +2302,40 @@
 
   font-size: 13px;
 
-  line-height: 1.8;
+  line-height:
+    1.8;
 
   animation:
     faqIn 0.4s var(--ease);
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    15. FINAL CTA
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .ambassador-final-cta {
   width: 100%;
 
   padding:
-    30px 24px 110px;
+    30px 24px
+    clamp(75px, 10vw, 110px);
 }
 
 .cta-panel {
   position: relative;
 
-  width: min(
-    100%,
-    var(--container)
-  );
+  width:
+    min(
+      100%,
+      var(--container)
+    );
 
   margin-inline: auto;
 
   padding:
-    100px 70px;
+    clamp(70px, 9vw, 100px)
+    clamp(25px, 6vw, 70px);
 
   text-align: center;
 
@@ -2267,9 +2409,11 @@
   font-size:
     clamp(44px, 6vw, 82px);
 
-  line-height: 0.98;
+  line-height:
+    0.98;
 
-  letter-spacing: -0.07em;
+  letter-spacing:
+    -0.07em;
 }
 
 .cta-panel p {
@@ -2281,9 +2425,11 @@
   color:
     rgba(255, 255, 255, 0.56);
 
-  font-size: 15px;
+  font-size:
+    clamp(13px, 1.5vw, 15px);
 
-  line-height: 1.8;
+  line-height:
+    1.8;
 }
 
 .cta-panel .primary-ambassador-btn {
@@ -2292,31 +2438,25 @@
 
   color:
     var(--stocker-ink) !important;
-
-  box-shadow:
-    0 14px 35px rgba(0, 0, 0, 0.20);
-}
-
-.cta-panel .primary-ambassador-btn:hover {
-  box-shadow:
-    0 20px 45px rgba(0, 0, 0, 0.30);
 }
 
 .cta-panel small {
   display: block;
 
-  margin-top: 17px;
+  margin-top:
+    17px;
 
   color:
     rgba(255, 255, 255, 0.38);
 
-  font-size: 10px;
+  font-size:
+    10px;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    16. FOOTER
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .ambassador-footer {
   width: 100%;
@@ -2347,13 +2487,14 @@
 }
 
 .ambassador-footer-inner .ambassador-logo {
-  font-size: 19px;
+  font-size:
+    19px;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    17. SCROLL REVEALS
-   --------------------------------------------------------- */
+   ========================================================= */
 
 .reveal-on-scroll {
   opacity: 0;
@@ -2373,25 +2514,25 @@
     translateY(0);
 }
 
-
-/* Stagger cards */
-
 .ambassador-grid .reveal-on-scroll:nth-child(2) {
-  transition-delay: 0.06s;
+  transition-delay:
+    0.06s;
 }
 
 .ambassador-grid .reveal-on-scroll:nth-child(3) {
-  transition-delay: 0.12s;
+  transition-delay:
+    0.12s;
 }
 
 .ambassador-grid .reveal-on-scroll:nth-child(4) {
-  transition-delay: 0.18s;
+  transition-delay:
+    0.18s;
 }
 
 
-/* ---------------------------------------------------------
-   18. FOCUS STATES
-   --------------------------------------------------------- */
+/* =========================================================
+   18. FOCUS
+   ========================================================= */
 
 .ambassador-page
 button:focus-visible,
@@ -2407,19 +2548,21 @@ summary:focus-visible {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    19. ANIMATIONS
-   --------------------------------------------------------- */
+   ========================================================= */
 
 @keyframes heroContentIn {
   from {
     opacity: 0;
+
     transform:
       translateY(30px);
   }
 
   to {
     opacity: 1;
+
     transform:
       translateY(0);
   }
@@ -2428,6 +2571,7 @@ summary:focus-visible {
 @keyframes heroCardIn {
   from {
     opacity: 0;
+
     transform:
       translateY(40px)
       scale(0.97);
@@ -2435,6 +2579,7 @@ summary:focus-visible {
 
   to {
     opacity: 1;
+
     transform:
       translateY(0)
       scale(1);
@@ -2471,12 +2616,14 @@ summary:focus-visible {
 @keyframes detailIn {
   from {
     opacity: 0;
+
     transform:
       translateY(12px);
   }
 
   to {
     opacity: 1;
+
     transform:
       translateY(0);
   }
@@ -2485,44 +2632,43 @@ summary:focus-visible {
 @keyframes faqIn {
   from {
     opacity: 0;
+
     transform:
       translateY(-6px);
   }
 
   to {
     opacity: 1;
+
     transform:
       translateY(0);
   }
 }
 
 
-/* ---------------------------------------------------------
-   20. TABLET
-   --------------------------------------------------------- */
+/* =========================================================
+   20. LARGE TABLET
+   ========================================================= */
 
-@media (max-width: 1050px) {
+@media (max-width: 1100px) {
 
   .ambassador-hero {
     grid-template-columns:
-      1fr 0.78fr;
+      minmax(0, 1fr)
+      minmax(300px, 0.75fr);
 
-    gap: 50px;
-  }
-
-  .ambassador-hero h1 {
-    font-size:
-      clamp(54px, 7vw, 82px);
+    gap:
+      50px;
   }
 
   .ambassador-grid {
     grid-template-columns:
-      repeat(2, 1fr);
+      repeat(2, minmax(0, 1fr));
   }
 
   .steps {
     grid-template-columns:
-      repeat(2, 1fr);
+      repeat(2, minmax(0, 1fr));
   }
 
   .step-item:nth-child(2) {
@@ -2537,23 +2683,21 @@ summary:focus-visible {
 
   .ambassador-dashboard-section {
     grid-template-columns:
-      1fr;
+      minmax(0, 0.85fr)
+      minmax(0, 1.15fr);
 
-    gap: 60px;
-  }
-
-  .dashboard-preview-content {
-    max-width: 700px;
+    gap:
+      55px;
   }
 
 }
 
 
-/* ---------------------------------------------------------
-   21. MOBILE
-   --------------------------------------------------------- */
+/* =========================================================
+   21. TABLET
+   ========================================================= */
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
 
   .ambassador-nav-inner,
   .ambassador-hero,
@@ -2561,56 +2705,139 @@ summary:focus-visible {
   .ambassador-footer-inner {
     width:
       min(
-        calc(100% - 32px),
+        calc(100% - 36px),
         var(--container)
       );
   }
 
-  .ambassador-nav-inner {
-    min-height: 68px;
+  .ambassador-hero {
+    grid-template-columns:
+      1fr;
+
+    max-width: 760px;
+
+    margin-inline: auto;
+
+    gap:
+      55px;
   }
 
-  .ambassador-nav-cta {
-    padding:
-      0 15px;
+  .ambassador-hero-content {
+    max-width: 720px;
+  }
 
-    font-size: 11px;
+  .earn-card {
+    max-width: 600px;
+  }
+
+  .join-guide-header {
+    grid-template-columns:
+      1fr
+      240px;
+  }
+
+  .join-guide-shell {
+    grid-template-columns:
+      minmax(260px, 0.78fr)
+      minmax(0, 1.22fr);
+  }
+
+  .requirements {
+    gap:
+      45px;
+  }
+
+}
+
+
+/* =========================================================
+   22. MOBILE / LARGE PHONE
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  .ambassador-nav-inner,
+  .ambassador-hero,
+  .ambassador-section,
+  .ambassador-footer-inner {
+    width:
+      calc(100% - 32px);
+  }
+
+  .ambassador-nav-inner {
+    min-height:
+      68px;
+  }
+
+  .ambassador-nav-actions {
+    gap:
+      4px;
   }
 
   .ambassador-login {
+    min-height:
+      40px;
+
     padding:
       0 10px;
 
-    font-size: 11px;
+    font-size:
+      11px;
+  }
+
+  .ambassador-nav-cta {
+    min-height:
+      40px;
+
+    padding:
+      0 14px;
+
+    font-size:
+      10px;
   }
 
   .ambassador-hero {
     width:
-      min(
-        calc(100% - 32px),
-        var(--container)
-      );
+      calc(100% - 32px);
 
-    min-height: auto;
+    max-width:
+      none;
 
     padding:
-      85px 0 90px;
+      72px 0 80px;
 
-    grid-template-columns:
-      1fr;
-
-    gap: 60px;
+    gap:
+      50px;
   }
 
   .ambassador-hero h1 {
     font-size:
-      clamp(54px, 14vw, 80px);
+      clamp(
+        48px,
+        13vw,
+        72px
+      );
+  }
+
+  .ambassador-hero-copy {
+    margin-top:
+      25px;
+
+    font-size:
+      15px;
+  }
+
+  .ambassador-hero-actions {
+    margin-top:
+      30px;
   }
 
   .earn-card {
-    min-height: 430px;
+    max-width:
+      none;
 
-    padding: 28px;
+    min-height:
+      420px;
 
     border-radius:
       28px;
@@ -2621,13 +2848,13 @@ summary:focus-visible {
       90px 0;
   }
 
-  .section-heading {
-    margin-bottom: 45px;
-  }
-
   .section-heading h2 {
     font-size:
-      clamp(40px, 11vw, 58px);
+      clamp(
+        38px,
+        9vw,
+        56px
+      );
   }
 
   .ambassador-grid {
@@ -2636,7 +2863,8 @@ summary:focus-visible {
   }
 
   .ambassador-feature-card {
-    min-height: 270px;
+    min-height:
+      260px;
   }
 
   .ambassador-section-dark {
@@ -2652,7 +2880,8 @@ summary:focus-visible {
   .step-item,
   .step-item:nth-child(3),
   .step-item:nth-child(4) {
-    min-height: auto;
+    min-height:
+      250px;
 
     border-left:
       1px solid rgba(255, 255, 255, 0.10);
@@ -2665,176 +2894,307 @@ summary:focus-visible {
   }
 
   .step-item:first-child {
-    border-top: 0;
+    border-top:
+      0;
   }
 
   .step-number {
-    margin-bottom: 70px;
+    margin-bottom:
+      70px;
   }
 
   .join-guide-header {
     grid-template-columns:
       1fr;
 
-    gap: 35px;
+    gap:
+      30px;
   }
 
   .join-guide-shell {
     grid-template-columns:
       1fr;
 
-    min-height: auto;
+    min-height:
+      auto;
+
+    border-radius:
+      28px;
   }
 
   .join-step-list {
-    border-right: 0;
+    border-right:
+      0;
 
     border-bottom:
       1px solid rgba(21, 19, 17, 0.09);
   }
 
+  .join-step {
+    min-height:
+      66px;
+  }
+
   .join-detail {
-    min-height: 500px;
+    min-height:
+      510px;
 
     padding:
-      50px 28px;
+      48px 28px;
+  }
+
+  .join-detail h3 {
+    font-size:
+      clamp(
+        36px,
+        8vw,
+        52px
+      );
   }
 
   .requirements {
     grid-template-columns:
       1fr;
 
-    gap: 45px;
+    gap:
+      45px;
 
     padding:
-      38px 28px;
+      42px 28px;
 
     border-radius:
       28px;
+  }
+
+  .ambassador-dashboard-section {
+    grid-template-columns:
+      1fr;
+
+    gap:
+      55px;
+  }
+
+  .dashboard-preview-content {
+    max-width:
+      700px;
+  }
+
+  .mockup-window {
+    transform:
+      none;
+  }
+
+  .dashboard-mockup:hover .mockup-window {
+    transform:
+      translateY(-5px);
   }
 
   .cta-panel {
-    padding:
-      80px 28px;
-
     border-radius:
       28px;
-  }
-
-  .ambassador-footer-inner {
-    min-height: auto;
-
-    padding:
-      28px 0;
-
-    flex-direction: column;
-
-    align-items: flex-start;
   }
 
 }
 
 
-/* ---------------------------------------------------------
-   22. SMALL MOBILE
-   --------------------------------------------------------- */
+/* =========================================================
+   23. MOBILE
+   ========================================================= */
 
 @media (max-width: 560px) {
 
+  .ambassador-nav-inner,
+  .ambassador-hero,
+  .ambassador-section,
+  .ambassador-footer-inner {
+    width:
+      calc(100% - 28px);
+  }
+
   .ambassador-nav-inner {
-    gap: 8px;
+    min-height:
+      64px;
   }
 
   .ambassador-logo {
-    font-size: 19px;
+    font-size:
+      19px;
   }
 
   .ambassador-login {
-    display: none;
+    display:
+      none;
   }
 
   .ambassador-nav-cta {
-    min-height: 40px;
+    min-height:
+      38px;
 
     padding:
-      0 14px;
+      0 13px;
 
-    font-size: 10px;
+    font-size:
+      10px;
   }
 
   .ambassador-hero {
     padding:
-      65px 0 75px;
+      62px 0 70px;
   }
 
   .ambassador-eyebrow {
-    margin-bottom: 20px;
+    max-width:
+      100%;
 
-    font-size: 9px;
+    margin-bottom:
+      20px;
+
+    font-size:
+      8px;
+
+    letter-spacing:
+      0.13em;
+  }
+
+  .ambassador-eyebrow::before {
+    width:
+      20px;
   }
 
   .ambassador-hero h1 {
     font-size:
-      clamp(48px, 15vw, 67px);
+      clamp(
+        46px,
+        14.5vw,
+        65px
+      );
 
     letter-spacing:
-      -0.075em;
+      -0.078em;
   }
 
   .ambassador-hero-copy {
-    margin-top: 25px;
+    font-size:
+      14px;
 
-    font-size: 14px;
-
-    line-height: 1.75;
+    line-height:
+      1.72;
   }
 
   .ambassador-hero-actions {
-    margin-top: 30px;
+    flex-direction:
+      column;
 
-    flex-direction: column;
-    align-items: stretch;
+    align-items:
+      stretch;
+
+    gap:
+      9px;
   }
 
   .primary-ambassador-btn,
   .secondary-ambassador-btn {
-    width: 100%;
+    width:
+      100%;
 
-    min-height: 52px;
+    min-height:
+      52px;
+  }
+
+  .ambassador-hero-note {
+    font-size:
+      10px;
+
+    line-height:
+      1.6;
   }
 
   .hero-trust-row {
-    gap: 6px;
+    gap:
+      6px;
+
+    margin-top:
+      24px;
   }
 
   .hero-trust-row span {
-    font-size: 9px;
+    padding:
+      7px 9px;
+
+    font-size:
+      8px;
   }
 
   .earn-card {
-    min-height: 400px;
+    min-height:
+      auto;
 
-    padding: 25px;
+    padding:
+      27px 22px;
 
     border-radius:
       24px;
   }
 
-  .earn-card-number {
+  .earn-card-label {
     font-size:
-      76px;
+      8px;
+  }
+
+  .earn-card-number {
+    margin-top:
+      9px;
+
+    font-size:
+      clamp(
+        68px,
+        20vw,
+        90px
+      );
+  }
+
+  .earn-card > p {
+    margin:
+      18px 0 25px;
+
+    font-size:
+      12px;
+  }
+
+  .earn-example {
+    padding:
+      17px 0;
   }
 
   .earn-example-row {
-    font-size: 10px;
+    font-size:
+      9px;
+
+    gap:
+      6px;
   }
 
   .earn-example-result {
-    font-size: 10px;
+    font-size:
+      9px;
+
+    gap:
+      8px;
   }
 
   .earn-example-result strong {
-    font-size: 13px;
+    font-size:
+      12px;
+  }
+
+  .earn-example-result.highlight strong {
+    font-size:
+      15px;
+  }
+
+  .earn-disclaimer {
+    font-size:
+      9px;
   }
 
   .ambassador-section {
@@ -2842,100 +3202,228 @@ summary:focus-visible {
       75px 0;
   }
 
+  .section-kicker {
+    margin-bottom:
+      14px;
+
+    font-size:
+      8px;
+  }
+
+  .section-heading {
+    margin-bottom:
+      40px;
+  }
+
   .section-heading h2 {
     font-size:
-      39px;
+      clamp(
+        36px,
+        10vw,
+        47px
+      );
 
     line-height:
       1.03;
   }
 
   .section-heading p {
+    margin-top:
+      18px;
+
     font-size:
-      14px;
+      13px;
+
+    line-height:
+      1.75;
   }
 
   .ambassador-feature-card {
-    min-height: 250px;
+    min-height:
+      245px;
 
-    padding: 24px;
-  }
-
-  .step-item {
     padding:
-      24px 20px;
+      24px;
+
+    border-radius:
+      17px;
   }
 
-  .step-number {
-    margin-bottom:
-      55px;
-  }
-
-  .join-guide-section {
-    padding-top:
-      75px;
-  }
-
-  .join-step {
-    grid-template-columns:
-      36px
-      minmax(0, 1fr)
+  .ambassador-feature-card h3 {
+    font-size:
       18px;
-
-    padding:
-      16px 12px;
   }
 
-  .join-step-number {
-    width: 30px;
-    height: 30px;
-  }
-
-  .join-step strong {
+  .ambassador-feature-card p {
     font-size:
       12px;
   }
 
+  .ambassador-section-dark {
+    padding:
+      76px 14px;
+  }
+
+  .step-item {
+    min-height:
+      245px;
+
+    padding:
+      23px 20px;
+  }
+
+  .step-number {
+    margin-bottom:
+      58px;
+  }
+
+  .step-item h3 {
+    font-size:
+      18px;
+  }
+
+  .step-item p {
+    font-size:
+      12px;
+  }
+
+  .join-guide-header {
+    gap:
+      25px;
+  }
+
+  .join-progress {
+    padding-bottom:
+      0;
+  }
+
+  .join-guide-shell {
+    border-radius:
+      22px;
+  }
+
+  .join-step-list {
+    padding:
+      9px;
+  }
+
+  .join-step {
+    grid-template-columns:
+      32px
+      minmax(0, 1fr)
+      17px;
+
+    gap:
+      10px;
+
+    padding:
+      14px 10px;
+
+    border-radius:
+      13px;
+  }
+
+  .join-step-number {
+    width:
+      28px;
+
+    height:
+      28px;
+
+    font-size:
+      8px;
+  }
+
+  .join-step strong {
+    margin-bottom:
+      3px;
+
+    font-size:
+      11px;
+  }
+
   .join-step small {
     font-size:
-      9px;
+      8px;
+
+    line-height:
+      1.45;
+  }
+
+  .join-step-arrow {
+    font-size:
+      15px;
   }
 
   .join-detail {
     min-height:
-      520px;
+      500px;
 
     padding:
-      45px 22px;
+      42px 21px;
   }
 
   .join-detail-number {
     right:
-      20px;
+      15px;
 
     top:
-      20px;
+      15px;
 
     font-size:
-      90px;
+      88px;
+  }
+
+  .join-detail-kicker {
+    font-size:
+      8px;
   }
 
   .join-detail h3 {
     font-size:
-      38px;
+      clamp(
+        34px,
+        10vw,
+        43px
+      );
   }
 
   .join-detail p {
+    margin-top:
+      18px;
+
     font-size:
-      13px;
+      12px;
+
+    line-height:
+      1.75;
+  }
+
+  .join-tip {
+    margin-top:
+      24px;
+
+    padding:
+      15px 16px;
+  }
+
+  .join-tip span {
+    font-size:
+      10px;
   }
 
   .join-detail-actions {
+    flex-direction:
+      column;
+
     align-items:
       stretch;
 
-    flex-direction:
-      column;
+    gap:
+      8px;
+
+    margin-top:
+      27px;
   }
 
   .join-detail-actions
@@ -2945,190 +3433,629 @@ summary:focus-visible {
       100%;
   }
 
+  .join-next-btn {
+    min-height:
+      50px;
+
+    font-size:
+      11px;
+  }
+
   .requirements {
     padding:
-      32px 22px;
+      32px 21px;
+
+    border-radius:
+      22px;
   }
 
   .requirements-content h2 {
     font-size:
-      39px;
+      clamp(
+        35px,
+        10vw,
+        44px
+      );
+  }
+
+  .requirements-content p {
+    font-size:
+      12px;
   }
 
   .requirement-item {
     grid-template-columns:
-      32px
-      1fr;
+      30px
+      minmax(0, 1fr);
+
+    gap:
+      12px;
 
     padding:
-      17px;
+      16px;
+
+    border-radius:
+      14px;
   }
 
   .requirement-check {
-    width: 30px;
-    height: 30px;
+    width:
+      29px;
 
-    font-size: 10px;
+    height:
+      29px;
+
+    font-size:
+      9px;
+  }
+
+  .requirement-item strong {
+    font-size:
+      12px;
+  }
+
+  .requirement-item p {
+    font-size:
+      10px;
+  }
+
+  .dashboard-feature {
+    grid-template-columns:
+      38px
+      minmax(0, 1fr);
+
+    gap:
+      12px;
+
+    padding:
+      18px 0;
+  }
+
+  .dashboard-feature-icon {
+    width:
+      32px;
+
+    height:
+      32px;
+  }
+
+  .dashboard-feature h3 {
+    font-size:
+      12px;
+  }
+
+  .dashboard-feature p {
+    font-size:
+      10px;
   }
 
   .mockup-window {
     border-radius:
-      20px;
-
-    transform:
-      none;
+      18px;
   }
 
-  .mockup-body {
-    grid-template-columns:
-      90px
-      1fr;
-  }
+  .mockup-topbar {
+    height:
+      42px;
 
-  .mockup-sidebar {
     padding:
-      18px 8px;
+      0 13px;
   }
 
-  .mockup-sidebar-logo {
-    margin:
-      0 7px 20px;
-
-    font-size:
-      12px;
-  }
-
-  .mockup-sidebar-item {
-    padding:
-      8px 7px;
-
-    font-size:
-      8px;
-  }
-
-  .mockup-main {
-    padding:
-      20px 15px;
-  }
-
-  .mockup-welcome h3 {
-    font-size:
-      19px;
-  }
-
-  .mockup-stat {
-    padding:
-      12px;
-  }
-
-  .mockup-stat strong {
-    font-size:
-      15px;
-  }
-
-  .mockup-link {
+  .mockup-title {
     font-size:
       7px;
   }
 
-  .faq-list summary {
-    padding:
-      21px 2px;
+  .mockup-dots span {
+    width:
+      5px;
 
-    font-size:
-      13px;
+    height:
+      5px;
   }
 
-  .faq-list details p {
+  .mockup-body {
+    min-height:
+      330px;
+
+    grid-template-columns:
+      74px
+      minmax(0, 1fr);
+  }
+
+  .mockup-sidebar {
+    padding:
+      15px 6px;
+  }
+
+  .mockup-sidebar-logo {
     margin:
-      0 35px 22px 2px;
+      0 5px 18px;
+
+    font-size:
+      10px;
+  }
+
+  .mockup-sidebar-item {
+    padding:
+      8px 5px;
+
+    font-size:
+      7px;
+
+    border-radius:
+      6px;
+  }
+
+  .mockup-main {
+    padding:
+      17px 12px;
+  }
+
+  .mockup-welcome span {
+    font-size:
+      6px;
+  }
+
+  .mockup-welcome h3 {
+    margin:
+      6px 0 18px;
+
+    font-size:
+      16px;
+  }
+
+  .mockup-stat-grid {
+    gap:
+      5px;
+  }
+
+  .mockup-stat {
+    padding:
+      10px;
+
+    border-radius:
+      8px;
+  }
+
+  .mockup-stat span {
+    margin-bottom:
+      6px;
+
+    font-size:
+      6px;
+  }
+
+  .mockup-stat strong {
+    font-size:
+      12px;
+  }
+
+  .mockup-referral {
+    margin-top:
+      16px;
+
+    padding:
+      12px;
+
+    border-radius:
+      9px;
+  }
+
+  .mockup-referral > span {
+    margin-bottom:
+      6px;
+
+    font-size:
+      6px;
+  }
+
+  .mockup-link {
+    gap:
+      5px;
+
+    padding:
+      8px;
+
+    font-size:
+      6px;
+
+    overflow:
+      hidden;
+  }
+
+  .mockup-link button {
+    padding:
+      5px 7px;
+
+    font-size:
+      6px;
+  }
+
+  .faq-list summary {
+    padding:
+      19px 2px;
+
+    gap:
+      15px;
 
     font-size:
       12px;
   }
 
+  .faq-list summary span {
+    width:
+      27px;
+
+    height:
+      27px;
+
+    font-size:
+      15px;
+  }
+
+  .faq-list details p {
+    margin:
+      0 34px 20px 2px;
+
+    font-size:
+      11px;
+
+    line-height:
+      1.75;
+  }
+
   .ambassador-final-cta {
     padding:
-      10px 16px 75px;
+      8px 14px 70px;
   }
 
   .cta-panel {
     padding:
-      70px 22px;
+      65px 20px;
+
+    border-radius:
+      22px;
   }
 
   .cta-panel h2 {
     font-size:
-      43px;
+      clamp(
+        40px,
+        11vw,
+        52px
+      );
   }
 
   .cta-panel p {
+    margin:
+      20px auto 28px;
+
     font-size:
-      13px;
+      12px;
+  }
+
+  .ambassador-footer-inner {
+    min-height:
+      auto;
+
+    padding:
+      27px 0;
+
+    flex-direction:
+      column;
+
+    align-items:
+      flex-start;
+
+    gap:
+      9px;
+  }
+
+  .ambassador-footer-inner p,
+  .ambassador-footer-inner span {
+    font-size:
+      9px;
   }
 
 }
 
 
-/* ---------------------------------------------------------
-   23. REDUCED MOTION
-   --------------------------------------------------------- */
+/* =========================================================
+   24. VERY SMALL PHONES
+   320px - 380px
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .ambassador-nav-inner,
+  .ambassador-hero,
+  .ambassador-section,
+  .ambassador-footer-inner {
+    width:
+      calc(100% - 24px);
+  }
+
+  .ambassador-nav-cta {
+    padding:
+      0 10px;
+
+    font-size:
+      9px;
+  }
+
+  .ambassador-hero {
+    padding-top:
+      52px;
+  }
+
+  .ambassador-hero h1 {
+    font-size:
+      44px;
+  }
+
+  .ambassador-hero-copy {
+    font-size:
+      13px;
+  }
+
+  .earn-card {
+    padding:
+      23px 18px;
+  }
+
+  .earn-card-number {
+    font-size:
+      64px;
+  }
+
+  .earn-example-row {
+    flex-wrap:
+      wrap;
+  }
+
+  .hero-trust-row span {
+    font-size:
+      7px;
+  }
+
+  .section-heading h2 {
+    font-size:
+      34px;
+  }
+
+  .ambassador-feature-card {
+    padding:
+      21px;
+  }
+
+  .join-step strong {
+    font-size:
+      10px;
+  }
+
+  .join-step small {
+    display:
+      none;
+  }
+
+  .join-detail {
+    padding:
+      38px 18px;
+  }
+
+  .join-detail h3 {
+    font-size:
+      32px;
+  }
+
+  .requirements {
+    padding:
+      28px 17px;
+  }
+
+  .requirements-content h2 {
+    font-size:
+      33px;
+  }
+
+  .mockup-body {
+    grid-template-columns:
+      64px
+      minmax(0, 1fr);
+  }
+
+  .mockup-sidebar-item {
+    font-size:
+      6px;
+  }
+
+  .mockup-main {
+    padding:
+      14px 9px;
+  }
+
+  .mockup-stat {
+    padding:
+      8px;
+  }
+
+  .mockup-stat strong {
+    font-size:
+      10px;
+  }
+
+  .mockup-referral {
+    padding:
+      9px;
+  }
+
+  .mockup-link {
+    font-size:
+      5px;
+  }
+
+  .cta-panel {
+    padding:
+      56px 17px;
+  }
+
+}
+
+
+/* =========================================================
+   25. LANDSCAPE PHONES
+   ========================================================= */
+
+@media (
+  max-height: 560px
+) and (
+  orientation: landscape
+) {
+
+  .ambassador-nav-inner {
+    min-height:
+      58px;
+  }
+
+  .ambassador-hero {
+    padding:
+      55px 0 65px;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(270px, 0.7fr);
+
+    align-items:
+      center;
+  }
+
+  .ambassador-hero h1 {
+    font-size:
+      clamp(
+        42px,
+        8vw,
+        64px
+      );
+  }
+
+  .earn-card {
+    min-height:
+      360px;
+  }
+
+}
+
+
+/* =========================================================
+   26. TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) {
+
+  .ambassador-feature-card:hover,
+  .step-item:hover,
+  .requirement-item:hover {
+    transform:
+      none;
+  }
+
+  .dashboard-mockup:hover .mockup-window {
+    transform:
+      none;
+  }
+
+  .primary-ambassador-btn:hover,
+  .secondary-ambassador-btn:hover,
+  .join-next-btn:hover,
+  .ambassador-nav-cta:hover {
+    transform:
+      none;
+  }
+
+}
+
+
+/* =========================================================
+   27. REDUCED MOTION
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
   *,
   *::before,
   *::after {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    scroll-behavior:
+      auto !important;
+
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
   }
 
   .reveal-on-scroll {
-    opacity: 1;
-    transform: none;
+    opacity:
+      1;
+
+    transform:
+      none;
   }
 
   .mockup-window {
-    transform: none;
+    transform:
+      none;
   }
 
 }
 
 
-/* ---------------------------------------------------------
-   24. PRINT
-   --------------------------------------------------------- */
+/* =========================================================
+   28. PRINT
+   ========================================================= */
 
 @media print {
 
   .ambassador-nav {
-    position: static;
+    position:
+      static;
   }
 
   .ambassador-page {
-    background: white;
+    background:
+      #ffffff;
   }
 
   .earn-card,
   .ambassador-section-dark,
   .cta-panel {
-    color: black;
-    background: white;
-    box-shadow: none;
+    color:
+      #000000;
+
+    background:
+      #ffffff;
+
+    box-shadow:
+      none;
   }
 
   .section-heading-light h2,
   .step-item h3,
   .cta-panel h2 {
-    color: black;
+    color:
+      #000000;
   }
 
   .section-heading-light p,
   .step-item p,
   .cta-panel p {
-    color: #444;
+    color:
+      #444444;
   }
 
 }
