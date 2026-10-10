@@ -1,45 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f5f1" />
   <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
+    name="description"
+    content="Manage your Stocker subscription and choose the plan that fits your business."
+  />
 
-  <title>Plans & Billing — stocker</title>
+  <title>Plans &amp; Billing — stocker</title>
 
-  <link
-    rel="stylesheet"
-    href="css/stocker.css"
-  >
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/stocker.css" />
 
   <style>
     .billing-page {
-      max-width: 1280px;
+      width: min(100% - 40px, 1280px);
       margin: 0 auto;
-      padding: 28px 24px 80px;
+      padding: 24px 0 64px;
+    }
+
+    .billing-page *,
+    .billing-page *::before,
+    .billing-page *::after {
+      box-sizing: border-box;
+    }
+
+    .billing-page .standalone-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     }
 
     .billing-hero {
       max-width: 760px;
-      margin: 56px auto 42px;
+      margin: 64px auto 44px;
       text-align: center;
     }
 
     .billing-hero h1 {
-      margin: 10px 0 14px;
-      font-size: clamp(2rem, 5vw, 4rem);
-      line-height: 1;
+      margin: 12px 0 16px;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.06;
       letter-spacing: -0.055em;
+      text-wrap: balance;
     }
 
     .billing-hero p {
-      max-width: 650px;
+      max-width: 620px;
       margin: 0 auto;
       color: var(--muted, #716b64);
       font-size: 1rem;
-      line-height: 1.7;
+      line-height: 1.75;
     }
 
     .billing-current {
@@ -47,52 +63,56 @@
       align-items: center;
       justify-content: space-between;
       gap: 18px;
-      max-width: 900px;
-      margin: 0 auto 28px;
-      padding: 18px 20px;
+      max-width: 920px;
+      margin: 0 auto 24px;
+      padding: 20px 22px;
       border: 1px solid rgba(0, 0, 0, 0.08);
       border-radius: 18px;
-      background: rgba(255, 255, 255, 0.78);
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.05);
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.04);
     }
 
     .billing-current-copy {
       display: grid;
-      gap: 4px;
+      gap: 5px;
     }
 
     .billing-current-copy span {
       color: var(--muted, #716b64);
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: 800;
       letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .billing-current-copy strong {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
     }
 
     .billing-current-status {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       min-height: 34px;
-      padding: 0 12px;
+      padding: 7px 13px;
       border-radius: 999px;
       background: #f1ede8;
+      color: #4d382a;
       font-size: 0.8rem;
       font-weight: 800;
     }
 
     .billing-status {
-      max-width: 900px;
+      max-width: 920px;
       margin: 0 auto 24px;
-      padding: 13px 16px;
-      border-radius: 14px;
-      font-size: 0.9rem;
-      line-height: 1.5;
+      padding: 14px 16px;
+      border: 1px solid transparent;
+      border-radius: 13px;
       background: #f5f2ee;
       color: #3d3935;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
     }
 
     .billing-status:empty {
@@ -100,37 +120,38 @@
     }
 
     .billing-status.billing-success {
+      border-color: #d1e7d5;
       background: #eef7f0;
       color: #245b35;
     }
 
     .billing-status.billing-error {
+      border-color: #f0d2ce;
       background: #fff0ee;
       color: #8a3027;
     }
 
     .billing-plans-heading {
-      max-width: 1100px;
-      margin: 0 auto 18px;
+      margin: 0 0 24px;
     }
 
     .billing-plans-heading h2 {
-      margin: 0 0 7px;
-      font-size: clamp(1.45rem, 3vw, 2rem);
-      letter-spacing: -0.035em;
+      margin: 0 0 8px;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      letter-spacing: -0.04em;
     }
 
     .billing-plans-heading p {
+      max-width: 650px;
       margin: 0;
       color: var(--muted, #716b64);
+      line-height: 1.65;
     }
 
     #plan-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-      max-width: 1280px;
-      margin: 0 auto;
+      gap: 18px;
       align-items: stretch;
     }
 
@@ -141,9 +162,9 @@
       flex-direction: column;
       padding: 24px;
       border: 1px solid rgba(0, 0, 0, 0.09);
-      border-radius: 24px;
+      border-radius: 22px;
       background: #fff;
-      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.055);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.045);
       transition:
         transform 180ms ease,
         box-shadow 180ms ease,
@@ -151,28 +172,29 @@
     }
 
     .billing-plan-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.09);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.075);
     }
 
     .billing-plan-card.plan-popular {
-      border-color: #5b3925;
-      box-shadow: 0 22px 65px rgba(91, 57, 37, 0.14);
+      border-color: #6b4f3a;
+      box-shadow: 0 18px 48px rgba(107, 79, 58, 0.12);
     }
 
     .billing-plan-card.plan-current {
-      border-color: rgba(91, 57, 37, 0.35);
+      border-color: rgba(107, 79, 58, 0.55);
     }
 
     .plan-badge {
       position: absolute;
       top: -12px;
-      left: 22px;
+      left: 20px;
+      max-width: calc(100% - 40px);
       padding: 6px 10px;
       border-radius: 999px;
-      background: #5b3925;
+      background: #6b4f3a;
       color: #fff;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 800;
     }
 
@@ -180,22 +202,28 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
+    }
+
+    .plan-card-top > div {
+      min-width: 0;
     }
 
     .plan-card-top h2 {
-      margin: 8px 0 0;
-      font-size: clamp(1.8rem, 3vw, 2.25rem);
-      line-height: 1;
+      margin: 10px 0 0;
+      font-size: clamp(1.65rem, 2.4vw, 2.1rem);
+      line-height: 1.15;
       letter-spacing: -0.05em;
+      overflow-wrap: anywhere;
     }
 
     .plan-card-top h2 small {
       margin-left: 4px;
       color: var(--muted, #716b64);
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       font-weight: 600;
       letter-spacing: 0;
+      white-space: nowrap;
     }
 
     .current-plan-pill {
@@ -204,63 +232,64 @@
       border-radius: 999px;
       background: #f2eee9;
       color: #5b3925;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 800;
     }
 
     .plan-description {
-      min-height: 66px;
-      margin: 18px 0 18px;
+      min-height: 82px;
+      margin: 18px 0;
       color: var(--muted, #716b64);
-      font-size: 0.88rem;
-      line-height: 1.6;
+      font-size: 0.86rem;
+      line-height: 1.65;
     }
 
     .plan-capacity {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 7px;
     }
 
     .plan-capacity div {
       min-width: 0;
-      padding: 10px 8px;
-      border-radius: 13px;
+      padding: 11px 5px;
+      border-radius: 12px;
       background: #f7f5f2;
       text-align: center;
     }
 
     .plan-capacity strong {
       display: block;
-      font-size: 0.9rem;
-      line-height: 1.2;
+      font-size: 0.88rem;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
     }
 
     .plan-capacity span {
       display: block;
-      margin-top: 3px;
+      margin-top: 4px;
       color: var(--muted, #716b64);
-      font-size: 0.65rem;
+      font-size: 0.64rem;
     }
 
     .plan-divider {
       height: 1px;
-      margin: 22px 0 17px;
+      margin: 22px 0 18px;
       background: rgba(0, 0, 0, 0.08);
     }
 
     .plan-features-title {
-      margin: 0 0 10px;
-      font-size: 0.77rem;
+      margin: 0 0 12px;
+      font-size: 0.75rem;
       font-weight: 800;
-      text-transform: uppercase;
       letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
     .plan-features {
       display: grid;
-      gap: 9px;
-      margin: 0 0 24px;
+      gap: 11px;
+      margin: 0 0 26px;
       padding: 0;
       list-style: none;
     }
@@ -268,38 +297,41 @@
     .plan-features li {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 9px;
       color: #45413d;
-      font-size: 0.8rem;
-      line-height: 1.45;
+      font-size: 0.79rem;
+      line-height: 1.5;
     }
 
     .feature-check {
-      flex: 0 0 auto;
       display: inline-flex;
+      flex: 0 0 18px;
       align-items: center;
       justify-content: center;
-      width: 17px;
-      height: 17px;
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
       border-radius: 50%;
       background: #eee8e2;
       color: #5b3925;
-      font-size: 0.66rem;
+      font-size: 0.68rem;
       font-weight: 900;
     }
 
     .billing-plan-card .btn {
       width: 100%;
+      min-height: 44px;
       margin-top: auto;
+      white-space: normal;
+    }
+
+    .billing-plan-card .btn:disabled {
+      cursor: wait;
+      opacity: 0.65;
     }
 
     .plan-custom {
-      background:
-        linear-gradient(
-          145deg,
-          #f7f4ef 0%,
-          #fff 65%
-        );
+      background: linear-gradient(145deg, #f7f4ef 0%, #fff 72%);
     }
 
     .plan-custom-summary {
@@ -311,10 +343,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 10px 12px;
+      gap: 10px;
+      padding: 11px 12px;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.85);
     }
 
     .plan-custom-summary span {
@@ -323,98 +355,132 @@
     }
 
     .plan-custom-summary strong {
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       text-align: right;
     }
 
     .billing-note {
-      max-width: 900px;
-      margin: 28px auto 0;
+      max-width: 780px;
+      margin: 30px auto 0;
       color: var(--muted, #716b64);
-      font-size: 0.78rem;
-      line-height: 1.6;
+      font-size: 0.79rem;
+      line-height: 1.7;
       text-align: center;
     }
 
     .billing-security {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 9px;
       margin-top: 14px;
       color: var(--muted, #716b64);
       font-size: 0.76rem;
       text-align: center;
     }
 
-    .is-loading {
-      opacity: 0.7;
-      pointer-events: none;
+    .billing-security-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #51815b;
     }
 
-    @media (max-width: 1120px) {
+    .billing-loading {
+      grid-column: 1 / -1;
+      padding: 32px 20px;
+      border: 1px dashed rgba(0, 0, 0, 0.16);
+      border-radius: 16px;
+      color: var(--muted, #716b64);
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .billing-page button:focus-visible,
+    .billing-page a:focus-visible {
+      outline: 3px solid rgba(107, 79, 58, 0.4);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 1100px) {
       #plan-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        max-width: 900px;
+        gap: 20px;
+      }
+
+      .plan-description {
+        min-height: 58px;
       }
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 640px) {
       .billing-page {
-        padding: 18px 14px 60px;
+        width: min(100% - 28px, 520px);
+        padding-top: 16px;
+        padding-bottom: 44px;
+      }
+
+      .billing-page .standalone-header {
+        gap: 10px;
+      }
+
+      .billing-page .standalone-header .btn {
+        padding: 10px 12px;
+        font-size: 0.8rem;
       }
 
       .billing-hero {
-        margin: 35px auto 30px;
+        margin: 42px auto 32px;
       }
 
       .billing-hero h1 {
-        font-size: 2.35rem;
+        font-size: clamp(2rem, 9vw, 2.7rem);
+      }
+
+      .billing-hero p {
+        font-size: 0.92rem;
       }
 
       .billing-current {
         align-items: flex-start;
         flex-direction: column;
-        border-radius: 16px;
+        gap: 12px;
+        padding: 17px;
       }
 
       #plan-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
       }
 
       .billing-plan-card {
-        padding: 20px;
-        border-radius: 20px;
+        padding: 22px 19px;
+        border-radius: 19px;
       }
 
       .plan-description {
         min-height: auto;
       }
 
-      .plan-capacity {
-        gap: 6px;
-      }
-
       .plan-capacity div {
-        padding: 9px 5px;
+        padding: 12px 6px;
       }
 
       .plan-capacity strong {
-        font-size: 0.82rem;
+        font-size: 0.9rem;
       }
 
       .plan-capacity span {
-        font-size: 0.61rem;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .billing-hero h1 {
-        font-size: 2rem;
+        font-size: 0.68rem;
       }
 
-      .plan-card-top h2 {
-        font-size: 1.8rem;
+      .plan-features li {
+        font-size: 0.84rem;
+      }
+
+      .billing-note {
+        font-size: 0.76rem;
       }
     }
 
@@ -431,51 +497,39 @@
 </head>
 
 <body>
-
   <main class="standalone-content billing-page">
-
     <header class="standalone-header">
-      <a class="wordmark" href="index.html">stocker</a>
+      <a class="wordmark" href="index.html" aria-label="Stocker workspace home">
+        stocker
+      </a>
 
-      <a
-        class="btn btn-secondary"
-        href="index.html"
-      >
+      <a class="btn btn-secondary" href="index.html">
         Back to workspace
       </a>
     </header>
 
-    <section class="billing-hero">
+    <section class="billing-hero" aria-labelledby="billing-title">
+      <span class="eyebrow">Stocker plans</span>
 
-      <span class="eyebrow">
-        Stocker plans
-      </span>
-
-      <h1>
+      <h1 id="billing-title">
         Choose the capacity your business needs.
       </h1>
 
       <p>
-        Start with the plan that fits your operation today.
-        Upgrade when your products, branches or team grow.
+        Start with a plan that fits your operation today. Upgrade as your
+        products, branches, and team grow.
       </p>
-
     </section>
 
     <section class="billing-current" aria-label="Current subscription">
-
       <div class="billing-current-copy">
         <span>Current plan</span>
-        <strong id="current-plan-name">Loading…</strong>
+        <strong id="current-plan-name">Loading your plan…</strong>
       </div>
 
-      <div
-        class="billing-current-status"
-        id="current-plan-status"
-      >
-        Loading…
+      <div class="billing-current-status" id="current-plan-status">
+        Checking status
       </div>
-
     </section>
 
     <div
@@ -483,47 +537,42 @@
       class="billing-status"
       role="status"
       aria-live="polite"
+      aria-atomic="true"
     ></div>
 
-    <section>
-
+    <section aria-labelledby="available-plans-title">
       <div class="billing-plans-heading">
-        <h2>Plans built around your operation</h2>
-
+        <h2 id="available-plans-title">Plans for your business</h2>
         <p>
-          Every paid plan gives you the core tools to manage
-          products, sales and daily store operations.
+          Compare product, branch, and staff limits before choosing a plan.
+          Available plans and prices are loaded from Stocker.
         </p>
       </div>
 
-      <div id="plan-grid">
-        <div class="empty-state">
-          Loading plans…
+      <div id="plan-grid" aria-live="polite" aria-busy="true">
+        <div class="billing-loading">
+          Loading available plans…
         </div>
       </div>
-
     </section>
 
     <p class="billing-note">
-      Payments are securely processed by Paystack. Your Stocker
-      subscription is activated after successful payment confirmation.
+      Payments are processed securely by Paystack. Your subscription is
+      activated after successful payment confirmation. If a payment is still
+      being verified, check your billing page again before attempting to pay
+      a second time.
     </p>
 
-    <div class="billing-security">
-      <span aria-hidden="true">●</span>
-      Secure payment
-      <span>·</span>
-      Paystack
-      <span>·</span>
-      No hidden setup fee
+    <div class="billing-security" aria-label="Payment information">
+      <span class="billing-security-dot" aria-hidden="true"></span>
+      <span>Secure payment</span>
+      <span aria-hidden="true">·</span>
+      <span>Paystack</span>
+      <span aria-hidden="true">·</span>
+      <span>No hidden setup fee</span>
     </div>
-
   </main>
 
-  <script
-    type="module"
-    src="js/billing/billing.js"
-  ></script>
-
+  <script type="module" src="js/billing/billing.js"></script>
 </body>
 </html>
