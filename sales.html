@@ -1,155 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>POS — stocker</title>
-<link rel="stylesheet" href="css/stocker.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <meta
+    name="description"
+    content="Record sales, accept payments, and print receipts with Stocker Point of Sale."
+  />
+
+  <title>Point of Sale — Stocker</title>
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+  <link rel="stylesheet" href="css/stocker.css">
 </head>
+
 <body>
-<div class="app-shell">
-  <aside class="sidebar" id="sidebar"></aside>
+  <div class="app-shell">
+    <aside
+      class="sidebar"
+      id="sidebar"
+      aria-label="Main navigation"
+    ></aside>
 
-  <main class="main-content">
-    <div class="topbar">
-      <div>
-        <div class="topbar-business" id="topbar-business">—</div>
-        <div class="topbar-meta" id="topbar-user">—</div>
-      </div>
+    <main class="main-content">
+      <!-- Top bar -->
+      <header class="topbar">
+        <div>
+          <div
+            class="topbar-business"
+            id="topbar-business"
+          >—</div>
 
-      <div class="topbar-actions">
-        <button class="btn btn-secondary" id="logout-btn">Sign out</button>
-      </div>
-    </div>
+          <div
+            class="topbar-meta"
+            id="topbar-user"
+          >—</div>
+        </div>
 
-    <h1 class="page-heading">Point of sale</h1>
-    <p class="page-intro">Scan a product or search your catalogue to start a transaction.</p>
-
-    <div class="pos-grid">
-      <div class="card">
-        <div class="pos-search-row">
-          <input
-            id="scan-input"
-            placeholder="Scan barcode or search product…"
-            autofocus
-            class="pos-search"
-            autocomplete="off"
-          />
-
+        <div class="topbar-actions">
           <button
-            class="btn btn-primary pos-search-btn"
-            id="search-product-btn"
+            class="btn btn-secondary"
+            id="logout-btn"
             type="button"
           >
-            Search
+            Sign out
+          </button>
+        </div>
+      </header>
+
+      <!-- Page heading -->
+      <h1 class="page-heading">Point of Sale</h1>
+
+      <p class="page-intro">
+        Scan a barcode or search for a product, add it to the sale,
+        and complete the customer's payment.
+      </p>
+
+      <!-- Checkout workspace -->
+      <section
+        class="pos-grid"
+        aria-label="Create a sale"
+      >
+        <!-- Product search -->
+        <div class="card">
+          <div class="section-header">
+            <div>
+              <h2 class="card-title">Find products</h2>
+
+              <p class="card-subtitle">
+                Scan a barcode or search by product name.
+              </p>
+            </div>
+          </div>
+
+          <form
+            id="pos-search-form"
+            class="pos-search-row"
+            role="search"
+          >
+            <input
+              id="scan-input"
+              type="search"
+              placeholder="Scan barcode or enter product name"
+              aria-label="Scan barcode or search products"
+              autocomplete="off"
+              autofocus
+              class="pos-search"
+            />
+
+            <button
+              class="btn btn-primary pos-search-btn"
+              id="search-product-btn"
+              type="submit"
+            >
+              Search
+            </button>
+          </form>
+
+          <div
+            id="search-results"
+            aria-live="polite"
+            aria-label="Product search results"
+          ></div>
+        </div>
+
+        <!-- Current sale -->
+        <div class="card cart-panel">
+          <h2 class="card-title">Current sale</h2>
+
+          <p class="card-subtitle">
+            Check the items and total before accepting payment.
+          </p>
+
+          <div
+            id="cart-lines"
+            aria-live="polite"
+            aria-label="Items in the current sale"
+          ></div>
+
+          <div
+            style="
+              border-top:1px solid var(--border);
+              margin-top:16px;
+              padding-top:16px;
+            "
+          >
+            <div
+              id="cart-total"
+              style="
+                display:flex;
+                justify-content:space-between;
+                gap:12px;
+                font-weight:700;
+                font-size:1.1rem;
+              "
+              aria-live="polite"
+            >
+              Total: —
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:18px;">
+            <label for="payment-method">
+              Payment method
+            </label>
+
+            <select id="payment-method">
+              <option value="CASH">Cash</option>
+              <option value="TRANSFER">Bank transfer</option>
+              <option value="POS">Card / POS terminal</option>
+              <option value="BANK">Bank deposit</option>
+              <option value="CREDIT">Credit — pay later</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label
+              id="amount-received-label"
+              for="amount-received"
+            >
+              Amount received
+            </label>
+
+            <input
+              id="amount-received"
+              type="number"
+              step="0.01"
+              min="0"
+              inputmode="decimal"
+              placeholder="0.00"
+            />
+
+            <small
+              style="
+                display:block;
+                margin-top:6px;
+                color:var(--muted);
+                line-height:1.5;
+              "
+            >
+              For credit sales, the amount received is set to zero.
+            </small>
+          </div>
+
+          <button
+            class="btn btn-primary btn-block"
+            id="checkout-btn"
+            type="button"
+          >
+            Complete sale
+          </button>
+
+          <p
+            style="
+              color:var(--muted);
+              font-size:0.75rem;
+              line-height:1.5;
+              margin:10px 0 0;
+            "
+          >
+            Check the items and payment method before completing a sale.
+          </p>
+        </div>
+      </section>
+
+      <!-- Recent sales -->
+      <section
+        class="card sales-history-card"
+        aria-labelledby="sales-history-heading"
+      >
+        <div class="section-header">
+          <div>
+            <h2
+              class="card-title"
+              id="sales-history-heading"
+            >
+              Recent sales
+            </h2>
+
+            <p class="card-subtitle">
+              Review the latest transactions recorded for your business.
+            </p>
+          </div>
+
+          <button
+            class="btn btn-secondary"
+            id="refresh-sales-btn"
+            type="button"
+          >
+            Refresh
           </button>
         </div>
 
-        <div id="search-results"></div>
-      </div>
-
-      <div class="card cart-panel">
-        <h2 class="card-title">Current sale</h2>
-        <p class="card-subtitle">Review items before taking payment.</p>
-
-        <div id="cart-lines"></div>
-
-        <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px">
-          <div
-            style="display:flex;justify-content:space-between;font-weight:600;font-size:1.1rem"
-            id="cart-total"
-          >
-            Total: —
+        <div
+          id="sales-history"
+          aria-live="polite"
+        >
+          <div class="empty-state">
+            Loading sales history…
           </div>
         </div>
+      </section>
+    </main>
+  </div>
 
-        <div class="field" style="margin-top:16px">
-          <label>Payment method</label>
+  <!-- Receipt dialog -->
+  <div
+    id="receipt-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Sale receipt"
+    style="
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(25,23,22,0.4);
+      align-items:center;
+      justify-content:center;
+      z-index:1100;
+      padding:20px;
+      overflow-y:auto;
+    "
+  >
+    <div
+      class="card receipt-content"
+      style="
+        width:360px;
+        max-width:100%;
+        max-height:calc(100vh - 40px);
+        overflow-y:auto;
+      "
+    >
+      <div id="receipt-body"></div>
 
-          <select id="payment-method">
-            <option value="CASH">Cash</option>
-            <option value="TRANSFER">Transfer</option>
-            <option value="POS">Card / POS</option>
-            <option value="BANK">Bank deposit</option>
-            <option value="CREDIT">Credit (pay later)</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label id="amount-received-label">Amount received</label>
-          <input
-            id="amount-received"
-            type="number"
-            step="0.01"
-            min="0"
-          />
-        </div>
-
-        <button
-          class="btn btn-primary btn-block"
-          id="checkout-btn"
-        >
-          Complete sale
-        </button>
-      </div>
-    </div>
-
-    <section class="card sales-history-card">
-      <div class="section-header">
-        <div>
-          <h2 class="card-title">Sales history</h2>
-          <p class="card-subtitle">
-            Recent transactions recorded for this business.
-          </p>
-        </div>
-
+      <div
+        class="receipt-actions"
+        style="
+          display:flex;
+          gap:8px;
+          margin-top:16px;
+        "
+      >
         <button
           class="btn btn-secondary"
-          id="refresh-sales-btn"
+          style="flex:1"
+          id="print-receipt-btn"
           type="button"
         >
-          Refresh
+          Print receipt
+        </button>
+
+        <button
+          class="btn btn-primary"
+          style="flex:1"
+          id="new-sale-btn"
+          type="button"
+        >
+          New sale
         </button>
       </div>
-
-      <div id="sales-history">
-        <div class="empty-state">Loading sales history…</div>
-      </div>
-    </section>
-  </main>
-</div>
-
-<!-- Receipt modal -->
-<div
-  id="receipt-modal"
-  style="display:none;position:fixed;inset:0;background:rgba(25,23,22,0.4);align-items:center;justify-content:center;z-index:500"
->
-  <div
-    class="card receipt-content"
-    style="width:360px;max-width:92vw"
-  >
-    <div id="receipt-body"></div>
-
-    <div style="display:flex;gap:8px;margin-top:16px">
-      <button
-        class="btn btn-secondary"
-        style="flex:1"
-        onclick="window.print()"
-      >
-        Print
-      </button>
-
-      <button
-        class="btn btn-primary"
-        style="flex:1"
-        id="new-sale-btn"
-      >
-        New sale
-      </button>
     </div>
   </div>
-</div>
 
-<script type="module" src="js/sales/pos.js"></script>
+  <script type="module" src="js/sales/pos.js"></script>
+
+  <script>
+    /*
+     * Keep the existing POS module responsible for sales.
+     * This small handler connects the accessible search form and
+     * print button without changing the checkout implementation.
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchForm = document.getElementById('pos-search-form');
+      const searchButton = document.getElementById('search-product-btn');
+      const printButton = document.getElementById('print-receipt-btn');
+
+      if (searchForm && searchButton) {
+        searchForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          searchButton.click();
+        });
+      }
+
+      if (printButton) {
+        printButton.addEventListener('click', () => {
+          window.print();
+        });
+      }
+    });
+  </script>
 </body>
 </html>
