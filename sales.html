@@ -1,55 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Record sales, accept payments, and print receipts with stocker Point of Sale." />
+  <meta name="theme-color" content="#f7f5f1" />
 
-  <meta
-    name="description"
-    content="Record sales, accept payments, and print receipts with Stocker Point of Sale."
-  />
+  <title>Point of Sale — stocker</title>
 
-  <title>Point of Sale — Stocker</title>
-
-  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
-  <link rel="stylesheet" href="css/stocker.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/stocker.css" />
 </head>
 
 <body>
   <div class="app-shell">
-    <aside
-      class="sidebar"
-      id="sidebar"
-      aria-label="Main navigation"
-    ></aside>
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation"></aside>
 
     <main class="main-content">
-      <!-- Top bar -->
       <header class="topbar">
         <div>
-          <div
-            class="topbar-business"
-            id="topbar-business"
-          >—</div>
-
-          <div
-            class="topbar-meta"
-            id="topbar-user"
-          >—</div>
+          <div class="topbar-business" id="topbar-business">—</div>
+          <div class="topbar-meta" id="topbar-user">—</div>
         </div>
 
         <div class="topbar-actions">
-          <button
-            class="btn btn-secondary"
-            id="logout-btn"
-            type="button"
-          >
+          <button class="btn btn-secondary" id="logout-btn" type="button">
             Sign out
           </button>
         </div>
       </header>
 
-      <!-- Page heading -->
       <h1 class="page-heading">Point of Sale</h1>
 
       <p class="page-intro">
@@ -57,28 +37,18 @@
         and complete the customer's payment.
       </p>
 
-      <!-- Checkout workspace -->
-      <section
-        class="pos-grid"
-        aria-label="Create a sale"
-      >
-        <!-- Product search -->
+      <section class="pos-grid" aria-label="Create a sale">
         <div class="card">
           <div class="section-header">
             <div>
               <h2 class="card-title">Find products</h2>
-
               <p class="card-subtitle">
                 Scan a barcode or search by product name.
               </p>
             </div>
           </div>
 
-          <form
-            id="pos-search-form"
-            class="pos-search-row"
-            role="search"
-          >
+          <div class="pos-search-row" role="search">
             <input
               id="scan-input"
               type="search"
@@ -92,11 +62,11 @@
             <button
               class="btn btn-primary pos-search-btn"
               id="search-product-btn"
-              type="submit"
+              type="button"
             >
               Search
             </button>
-          </form>
+          </div>
 
           <div
             id="search-results"
@@ -105,7 +75,6 @@
           ></div>
         </div>
 
-        <!-- Current sale -->
         <div class="card cart-panel">
           <h2 class="card-title">Current sale</h2>
 
@@ -119,22 +88,10 @@
             aria-label="Items in the current sale"
           ></div>
 
-          <div
-            style="
-              border-top:1px solid var(--border);
-              margin-top:16px;
-              padding-top:16px;
-            "
-          >
+          <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:16px;">
             <div
               id="cart-total"
-              style="
-                display:flex;
-                justify-content:space-between;
-                gap:12px;
-                font-weight:700;
-                font-size:1.1rem;
-              "
+              style="display:flex;justify-content:space-between;gap:12px;font-weight:700;font-size:1.1rem;"
               aria-live="polite"
             >
               Total: —
@@ -142,9 +99,7 @@
           </div>
 
           <div class="field" style="margin-top:18px;">
-            <label for="payment-method">
-              Payment method
-            </label>
+            <label for="payment-method">Payment method</label>
 
             <select id="payment-method">
               <option value="CASH">Cash</option>
@@ -156,10 +111,7 @@
           </div>
 
           <div class="field">
-            <label
-              id="amount-received-label"
-              for="amount-received"
-            >
+            <label id="amount-received-label" for="amount-received">
               Amount received
             </label>
 
@@ -172,14 +124,7 @@
               placeholder="0.00"
             />
 
-            <small
-              style="
-                display:block;
-                margin-top:6px;
-                color:var(--muted);
-                line-height:1.5;
-              "
-            >
+            <small style="display:block;margin-top:6px;color:var(--muted);line-height:1.5;">
               For credit sales, the amount received is set to zero.
             </small>
           </div>
@@ -192,33 +137,16 @@
             Complete sale
           </button>
 
-          <p
-            style="
-              color:var(--muted);
-              font-size:0.75rem;
-              line-height:1.5;
-              margin:10px 0 0;
-            "
-          >
+          <p style="color:var(--muted);font-size:0.75rem;line-height:1.5;margin:10px 0 0;">
             Check the items and payment method before completing a sale.
           </p>
         </div>
       </section>
 
-      <!-- Recent sales -->
-      <section
-        class="card sales-history-card"
-        aria-labelledby="sales-history-heading"
-      >
+      <section class="card sales-history-card" aria-labelledby="sales-history-heading">
         <div class="section-header">
           <div>
-            <h2
-              class="card-title"
-              id="sales-history-heading"
-            >
-              Recent sales
-            </h2>
-
+            <h2 class="card-title" id="sales-history-heading">Recent sales</h2>
             <p class="card-subtitle">
               Review the latest transactions recorded for your business.
             </p>
@@ -233,55 +161,36 @@
           </button>
         </div>
 
-        <div
-          id="sales-history"
-          aria-live="polite"
-        >
-          <div class="empty-state">
-            Loading sales history…
-          </div>
+        <div id="sales-history" aria-live="polite">
+          <div class="empty-state">Loading sales history…</div>
         </div>
       </section>
     </main>
   </div>
 
-  <!-- Receipt dialog -->
   <div
     id="receipt-modal"
     role="dialog"
     aria-modal="true"
     aria-label="Sale receipt"
-    style="
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(25,23,22,0.4);
-      align-items:center;
-      justify-content:center;
-      z-index:1100;
-      padding:20px;
-      overflow-y:auto;
-    "
+    style="display:none;position:fixed;inset:0;background:rgba(25,23,22,0.4);align-items:center;justify-content:center;z-index:1100;padding:20px;overflow-y:auto;"
   >
     <div
       class="card receipt-content"
-      style="
-        width:360px;
-        max-width:100%;
-        max-height:calc(100vh - 40px);
-        overflow-y:auto;
-      "
+      style="width:360px;max-width:100%;max-height:calc(100vh - 40px);overflow-y:auto;"
     >
       <div id="receipt-body"></div>
 
-      <div
-        class="receipt-actions"
-        style="
-          display:flex;
-          gap:8px;
-          margin-top:16px;
-        "
-      >
+      <div class="receipt-actions" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;">
+        <div class="field" style="flex:1 1 100%;margin:0;">
+          <label for="receipt-paper-size">Receipt paper size</label>
+
+          <select id="receipt-paper-size">
+            <option value="80mm">80 mm thermal printer</option>
+            <option value="58mm">58 mm thermal printer</option>
+          </select>
+        </div>
+
         <button
           class="btn btn-secondary"
           style="flex:1"
@@ -304,31 +213,6 @@
   </div>
 
   <script type="module" src="js/sales/pos.js"></script>
-
-  <script>
-    /*
-     * Keep the existing POS module responsible for sales.
-     * This small handler connects the accessible search form and
-     * print button without changing the checkout implementation.
-     */
-    document.addEventListener('DOMContentLoaded', () => {
-      const searchForm = document.getElementById('pos-search-form');
-      const searchButton = document.getElementById('search-product-btn');
-      const printButton = document.getElementById('print-receipt-btn');
-
-      if (searchForm && searchButton) {
-        searchForm.addEventListener('submit', (event) => {
-          event.preventDefault();
-          searchButton.click();
-        });
-      }
-
-      if (printButton) {
-        printButton.addEventListener('click', () => {
-          window.print();
-        });
-      }
-    });
-  </script>
+  <script type="module" src="js/shared/receipt-print.js"></script>
 </body>
 </html>
