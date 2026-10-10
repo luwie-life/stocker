@@ -1,1 +1,187 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Invoices — stocker</title><link rel="stylesheet" href="css/stocker.css"></head><body><div class="app-shell"><aside class="sidebar" id="sidebar"></aside><main class="main-content"><div class="topbar"><div><div class="topbar-business" id="topbar-business">—</div><div class="topbar-meta" id="topbar-user">—</div></div><div class="topbar-actions"><button class="btn btn-secondary" id="logout-btn">Sign out</button></div></div><h1 class="page-heading">Invoices</h1><p class="page-intro">Create a clean record for customers who need to pay later.</p><div class="admin-grid"><section class="card"><div class="section-header"><div><h2 class="card-title">New invoice</h2><p class="card-subtitle">Draft it now, issue it when ready.</p></div></div><form id="invoice-form"><div class="field"><label for="invoice-branch">Branch</label><select id="invoice-branch" required></select></div><div class="field"><label for="invoice-description">Line description</label><input id="invoice-description" required></div><div class="form-row"><div class="field"><label for="invoice-quantity">Quantity</label><input id="invoice-quantity" type="number" min="1" value="1" required></div><div class="field"><label for="invoice-price">Unit price</label><input id="invoice-price" type="number" min="0" step="0.01" required></div></div><div class="field"><label for="invoice-notes">Notes</label><textarea id="invoice-notes" rows="3"></textarea></div><button class="btn btn-primary" id="invoice-submit">Create invoice</button></form></section><section class="card"><div class="section-header"><div><h2 class="card-title">Recent invoices</h2><p class="card-subtitle">Print-ready records for your business.</p></div><button class="btn btn-secondary" id="refresh-invoices" type="button">Refresh</button></div><div id="invoice-list"><div class="empty-state">Loading…</div></div></section></div></main></div><script type="module" src="js/invoices/invoices.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f5f1" />
+
+  <title>Invoices — stocker</title>
+  <meta
+    name="description"
+    content="Create and manage customer invoices for your business with stocker."
+  />
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/stocker.css" />
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <div class="topbar-business" id="topbar-business">—</div>
+          <div class="topbar-meta" id="topbar-user">—</div>
+        </div>
+
+        <div class="topbar-actions">
+          <button
+            class="btn btn-secondary"
+            id="logout-btn"
+            type="button"
+          >
+            Sign out
+          </button>
+        </div>
+      </header>
+
+      <section aria-labelledby="page-title">
+        <div class="section-header">
+          <div>
+            <h1 class="page-heading" id="page-title">Invoices</h1>
+            <p class="page-intro">
+              Create clear payment records and keep track of what you've billed.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="admin-grid">
+        <section class="card" aria-labelledby="new-invoice-title">
+          <div class="section-header">
+            <div>
+              <h2 class="card-title" id="new-invoice-title">
+                Create an invoice
+              </h2>
+              <p class="card-subtitle">
+                Add the item or service, set the price, and issue the invoice.
+              </p>
+            </div>
+          </div>
+
+          <form id="invoice-form">
+            <div class="field">
+              <label for="invoice-branch">Business branch</label>
+              <select id="invoice-branch" name="branch" required>
+                <option value="">Loading branches…</option>
+              </select>
+              <small class="field-help">
+                Select the branch responsible for this invoice.
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="invoice-description">Item or service</label>
+              <input
+                id="invoice-description"
+                name="description"
+                type="text"
+                placeholder="e.g. Office supplies or consulting"
+                maxlength="200"
+                autocomplete="off"
+                required
+              />
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="invoice-quantity">Quantity</label>
+                <input
+                  id="invoice-quantity"
+                  name="quantity"
+                  type="number"
+                  min="1"
+                  step="1"
+                  value="1"
+                  inputmode="numeric"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="invoice-price">Unit price</label>
+                <input
+                  id="invoice-price"
+                  name="price"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  inputmode="decimal"
+                  placeholder="0.00"
+                  required
+                />
+                <small class="field-help">
+                  Enter the price for one unit.
+                </small>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="invoice-notes">Additional notes</label>
+              <textarea
+                id="invoice-notes"
+                name="notes"
+                rows="4"
+                maxlength="1000"
+                placeholder="Optional payment details or instructions"
+              ></textarea>
+              <small class="field-help">
+                Include any details the customer should know.
+              </small>
+            </div>
+
+            <div class="form-actions">
+              <button
+                class="btn btn-primary"
+                id="invoice-submit"
+                type="submit"
+              >
+                Create invoice
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card" aria-labelledby="recent-invoices-title">
+          <div class="section-header">
+            <div>
+              <h2 class="card-title" id="recent-invoices-title">
+                Recent invoices
+              </h2>
+              <p class="card-subtitle">
+                Review the latest invoices created by your business.
+              </p>
+            </div>
+
+            <button
+              class="btn btn-secondary"
+              id="refresh-invoices"
+              type="button"
+            >
+              Refresh
+            </button>
+          </div>
+
+          <div
+            id="invoice-list"
+            aria-live="polite"
+            aria-busy="true"
+          >
+            <div class="empty-state">
+              Loading invoices…
+            </div>
+          </div>
+
+          <p class="card-subtitle" style="margin-top: 16px;">
+            Showing up to 20 recent invoices.
+          </p>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/invoices/invoices.js"></script>
+</body>
+</html>
