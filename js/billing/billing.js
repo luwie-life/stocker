@@ -11,6 +11,23 @@ const currentPlanStatus = document.getElementById('current-plan-status');
 
 const PLAN_ORDER = ['STARTER', 'GROWTH', 'BUSINESS', 'SCALE'];
 
+const PLAN_DESCRIPTIONS = {
+  STARTER:
+    'For single-location businesses ready to track sales and inventory more reliably.',
+  GROWTH:
+    'For growing businesses managing more products, staff, and daily activity.',
+  BUSINESS:
+    'For established businesses that need greater capacity and operational control.',
+  SCALE:
+    'For larger operations managing multiple locations and larger teams.',
+};
+
+const PLAN_BADGES = {
+  GROWTH: 'Most popular',
+  BUSINESS: 'For growing teams',
+  SCALE: 'For larger operations',
+};
+
 function setStatus(message, kind = '') {
   if (!status) return;
 
@@ -18,8 +35,32 @@ function setStatus(message, kind = '') {
   status.className = `billing-status ${kind}`.trim();
 }
 
+function setGridLoading(isLoading) {
+  if (!grid) return;
+
+  grid.setAttribute('aria-busy', String(isLoading));
+}
+
 function formatNaira(amount) {
-  return `₦${Number(amount || 0).toLocaleString('en-NG')}`;
+  const value = Number(amount);
+
+  if (!Number.isFinite(value) || value < 0) {
+    return 'Price unavailable';
+  }
+
+  return `₦${value.toLocaleString('en-NG', {
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+function formatNumber(value) {
+  const number = Number(value);
+
+  if (!Number.isFinite(number) || number < 0) {
+    return '—';
+  }
+
+  return number.toLocaleString('en-NG');
 }
 
 function escapeHtml(value = '') {
@@ -32,37 +73,31 @@ function escapeHtml(value = '') {
 }
 
 function getPlanDescription(key) {
-  const descriptions = {
-    STARTER: 'For single-location businesses that want to stop guessing and start tracking.',
-    GROWTH: 'For growing businesses with more products, staff and daily activity.',
-    BUSINESS: 'For established businesses that need more capacity and operational control.',
-    SCALE: 'For larger operations managing multiple locations and larger teams.',
-  };
-
-  return descriptions[key] || 'Built to help you run your business with better visibility.';
+  return PLAN_DESCRIPTIONS[key] ||
+    'Designed to help you manage your business with better visibility.';
 }
 
 function getPlanBadge(key) {
-  if (key === 'GROWTH') return 'Most popular';
-  if (key === 'BUSINESS') return 'For growing teams';
-  if (key === 'SCALE') return 'For larger operations';
-
-  return '';
+  return PLAN_BADGES[key] || '';
 }
 
 function getPlanFeatures(key, plan) {
   const common = [
-    'POS & sales management',
+    'Point of sale and sales management',
     'Inventory management',
     'Sales history',
-    'Receipts & invoices',
+    'Receipts and invoices',
     'Business dashboard',
   ];
 
+  const branches = Number(plan.branches);
+  const products = Number(plan.products);
+  const staff = Number(plan.staff);
+
   const capacity = [
-    `${plan.branches === 1 ? '1 branch' : `Up to ${plan.branches} branches`}`,
-    `${Number(plan.products).toLocaleString('en-NG')} products`,
-    `${plan.staff} staff ${plan.staff === 1 ? 'account' : 'accounts'}`,
+    `${branches === 1 ? '1 branch' : `Up to ${formatNumber(branches)} branches`}`,
+    `${formatNumber(products)} products`,
+    `${formatNumber(staff)} staff ${staff === 1 ? 'account' : 'accounts'}`,
   ];
 
   if (key === 'STARTER') {
@@ -116,36 +151,63 @@ function renderPlanCard(key, plan, current) {
   const badge = getPlanBadge(key);
   const features = getPlanFeatures(key, plan);
 
+  const amount = formatNaira(plan.amountNaira);
+  const planName = escapeHtml(plan.name || key);
+
+  let buttonLabel = 'Choose plan';
+
+  if (isActive) {
+    buttonLabel = 'Renew plan';
+  } else if (isCurrent) {
+    buttonLabel = 'Continue with plan';
+  }
+
   return `
-    <article class="plan-card billing-plan-card ${isCurrent ? 'plan-current' : ''} ${key === 'GROWTH' ? 'plan-popular' : ''}">
-      ${badge ? `<div class="plan-badge">${escapeHtml(badge)}</div>` : ''}
+    <article
+      class="plan-card billing-plan-card
+        ${isCurrent ? 'plan-current' : ''}
+        ${key === 'GROWTH' ? 'plan-popular' : ''}"
+      aria-label="${planName} subscription plan"
+    >
+      ${
+        badge
+          ? `<div class="plan-badge">${escapeHtml(badge)}</div>`
+          : ''
+      }
 
       <div class="plan-card-top">
         <div>
-          <span class="eyebrow">${escapeHtml(plan.name)}</span>
-          <h2>${formatNaira(plan.amountNaira)}<small>/month</small></h2>
+          <span class="eyebrow">${planName}</span>
+          <h2>
+            ${amount}
+            <small>/month</small>
+          </h2>
         </div>
 
-        ${isCurrent ? '<span class="current-plan-pill">Current</span>' : ''}
+        ${
+          isCurrent
+            ? '<span class="current-plan-pill">Current</span>'
+            : ''
+        }
       </div>
 
       <p class="plan-description">
         ${escapeHtml(getPlanDescription(key))}
       </p>
 
-      <div class="plan-capacity">
+      <div class="plan-capacity" aria-label="Plan limits">
         <div>
-          <strong>${plan.branches}</strong>
-          <span>${plan.branches === 1 ? 'branch' : 'branches'}</span>
+          <strong>${formatNumber(plan.branches)}</strong>
+          <span>${Number(plan.branches) === 1 ? 'branch' : 'branches'}</span>
         </div>
 
         <div>
-          <strong>${Number(plan.products).toLocaleString('en-NG')}</strong>
+          <strong>${formatNumber(plan.products)}</strong>
           <span>products</span>
         </div>
 
         <div>
-          <strong>${plan.staff}</strong>
+          <strong>${formatNumber(plan.staff)}</strong>
           <span>staff</span>
         </div>
       </div>
@@ -165,11 +227,11 @@ function renderPlanCard(key, plan, current) {
 
       <button
         class="btn ${key === 'GROWTH' ? 'btn-primary' : 'btn-secondary'} choose-plan"
-        data-plan="${key}"
+        data-plan="${escapeHtml(key)}"
         type="button"
-        ${isActive ? '' : ''}
+        aria-label="${buttonLabel}: ${planName}"
       >
-        ${isActive ? 'Renew plan' : isCurrent ? 'Continue with plan' : 'Choose plan'}
+        ${buttonLabel}
       </button>
     </article>
   `;
@@ -186,12 +248,12 @@ function renderCustomCard() {
       </div>
 
       <p class="plan-description">
-        For businesses that need capacity beyond the standard Stocker plans.
+        For businesses that need more capacity than the standard plans offer.
       </p>
 
       <div class="plan-custom-summary">
         <div>
-          <span>Built around you</span>
+          <span>Capacity</span>
           <strong>Flexible limits</strong>
         </div>
 
@@ -208,31 +270,34 @@ function renderCustomCard() {
 
       <div class="plan-divider"></div>
 
-      <p class="plan-features-title">Custom plan can cover</p>
+      <p class="plan-features-title">A custom plan can include</p>
 
       <ul class="plan-features">
         <li>
-          <span class="feature-check">✓</span>
+          <span class="feature-check" aria-hidden="true">✓</span>
           <span>Higher branch capacity</span>
         </li>
 
         <li>
-          <span class="feature-check">✓</span>
+          <span class="feature-check" aria-hidden="true">✓</span>
           <span>Higher product capacity</span>
         </li>
 
         <li>
-          <span class="feature-check">✓</span>
+          <span class="feature-check" aria-hidden="true">✓</span>
           <span>Larger staff teams</span>
         </li>
 
         <li>
-          <span class="feature-check">✓</span>
+          <span class="feature-check" aria-hidden="true">✓</span>
           <span>Custom onboarding</span>
         </li>
       </ul>
 
-      <button class="btn btn-secondary custom-plan-request" type="button">
+      <button
+        class="btn btn-secondary custom-plan-request"
+        type="button"
+      >
         Request custom plan
       </button>
     </article>
@@ -240,9 +305,23 @@ function renderCustomCard() {
 }
 
 function renderPlans(plans, current) {
+  if (!grid) return;
+
   const orderedPlans = PLAN_ORDER
     .filter((key) => plans[key])
     .map((key) => [key, plans[key]]);
+
+  if (!orderedPlans.length) {
+    grid.innerHTML = `
+      <div class="billing-loading">
+        No subscription plans are available right now.
+        Please check again later.
+      </div>
+    `;
+
+    setGridLoading(false);
+    return;
+  }
 
   grid.innerHTML = `
     ${orderedPlans
@@ -252,127 +331,180 @@ function renderPlans(plans, current) {
     ${renderCustomCard()}
   `;
 
+  setGridLoading(false);
   attachPlanEvents();
 }
 
+function setButtonLoading(button, loading, loadingText = 'Please wait…') {
+  if (!button) return;
+
+  if (loading) {
+    button.dataset.originalText = button.textContent.trim();
+    button.textContent = loadingText;
+    button.disabled = true;
+    button.classList.add('is-loading');
+    button.setAttribute('aria-busy', 'true');
+  } else {
+    button.textContent = button.dataset.originalText || button.textContent;
+    button.disabled = false;
+    button.classList.remove('is-loading');
+    button.removeAttribute('aria-busy');
+    delete button.dataset.originalText;
+  }
+}
+
 function attachPlanEvents() {
+  if (!grid) return;
+
   grid.querySelectorAll('.choose-plan').forEach((button) => {
     button.addEventListener('click', async () => {
       const plan = button.dataset.plan;
 
-      button.disabled = true;
-      button.classList.add('is-loading');
+      if (!plan) {
+        setStatus('Please select a valid subscription plan.', 'billing-error');
+        return;
+      }
 
+      setButtonLoading(button, true, 'Preparing checkout…');
       setStatus('Preparing secure checkout…');
 
       try {
-        const response = await api.post('/billing/initialize', {
-          plan,
-        });
+        const response = await api.post('/billing/initialize', { plan });
+        const authorizationUrl = response?.data?.authorizationUrl;
 
-        if (!response?.data?.authorizationUrl) {
-          throw new Error('Payment checkout could not be created.');
+        if (!authorizationUrl) {
+          throw new Error(
+            'Checkout could not be created. Please try again.'
+          );
         }
 
-        location.href = response.data.authorizationUrl;
+        let checkoutUrl;
+
+        try {
+          checkoutUrl = new URL(authorizationUrl);
+        } catch {
+          throw new Error('The payment provider returned an invalid checkout link.');
+        }
+
+        if (checkoutUrl.protocol !== 'https:') {
+          throw new Error('The checkout link is not secure. Please contact support.');
+        }
+
+        location.assign(checkoutUrl.href);
       } catch (error) {
         setStatus(
           error.message || 'Unable to start payment. Please try again.',
           'billing-error'
         );
 
-        button.disabled = false;
-        button.classList.remove('is-loading');
+        setButtonLoading(button, false);
       }
     });
   });
 
-  grid.querySelector('.custom-plan-request')?.addEventListener('click', async () => {
-    const message = window.prompt(
-      'Tell the Stocker team what your business needs:'
-    );
+  grid.querySelector('.custom-plan-request')
+    ?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
 
-    if (message === null) return;
-
-    const cleanMessage = message.trim();
-
-    if (!cleanMessage) {
-      setStatus('Please tell us what you need before sending the request.', 'billing-error');
-      return;
-    }
-
-    const button = grid.querySelector('.custom-plan-request');
-
-    if (button) {
-      button.disabled = true;
-      button.classList.add('is-loading');
-    }
-
-    try {
-      await api.post('/billing/custom-request', {
-        message: cleanMessage,
-      });
-
-      setStatus(
-        'Your custom plan request was sent. The Stocker team will reply in your workspace.',
-        'billing-success'
+      const message = window.prompt(
+        'Tell the Stocker team about your business and what you need from a custom plan.'
       );
-    } catch (error) {
-      setStatus(
-        error.message || 'Unable to send your request. Please try again.',
-        'billing-error'
-      );
-    } finally {
-      if (button) {
-        button.disabled = false;
-        button.classList.remove('is-loading');
+
+      if (message === null) return;
+
+      const cleanMessage = message.trim();
+
+      if (!cleanMessage) {
+        setStatus(
+          'Please describe what your business needs before sending the request.',
+          'billing-error'
+        );
+        return;
       }
-    }
-  });
+
+      if (cleanMessage.length < 10) {
+        setStatus(
+          'Please provide a little more detail so the team can understand your requirements.',
+          'billing-error'
+        );
+        return;
+      }
+
+      if (cleanMessage.length > 2000) {
+        setStatus(
+          'Your request is too long. Please keep it under 2,000 characters.',
+          'billing-error'
+        );
+        return;
+      }
+
+      setButtonLoading(button, true, 'Sending request…');
+      setStatus('Sending your custom plan request…');
+
+      try {
+        await api.post('/billing/custom-request', {
+          message: cleanMessage,
+        });
+
+        setStatus(
+          'Your custom plan request was sent successfully.',
+          'billing-success'
+        );
+      } catch (error) {
+        setStatus(
+          error.message || 'Unable to send your request. Please try again.',
+          'billing-error'
+        );
+      } finally {
+        setButtonLoading(button, false);
+      }
+    });
 }
 
 function renderCurrentPlan(current, plans) {
   if (!currentPlanName || !currentPlanStatus) return;
 
   const currentKey = current.plan || 'STARTER';
-  const currentPlan = plans[currentKey];
+  const plan = plans[currentKey];
 
-  if (!currentPlan) {
-    currentPlanName.textContent = 'Starter';
-    currentPlanStatus.textContent = 'Trial';
+  if (!plan) {
+    currentPlanName.textContent = 'Plan information unavailable';
+    currentPlanStatus.textContent = 'Unknown';
     return;
   }
 
-  currentPlanName.textContent = currentPlan.name;
+  currentPlanName.textContent = plan.name || currentKey;
 
-  if (current.status === 'ACTIVE') {
-    currentPlanStatus.textContent = 'Active';
-  } else if (current.status === 'TRIAL') {
-    currentPlanStatus.textContent = 'Free trial';
-  } else if (current.status === 'PAUSED') {
-    currentPlanStatus.textContent = 'Paused';
-  } else {
-    currentPlanStatus.textContent = current.status || 'Active';
-  }
+  const labels = {
+    ACTIVE: 'Active',
+    TRIAL: 'Free trial',
+    PAUSED: 'Paused',
+    PENDING: 'Pending',
+    EXPIRED: 'Expired',
+    CANCELLED: 'Cancelled',
+    INACTIVE: 'Inactive',
+  };
+
+  currentPlanStatus.textContent =
+    labels[current.status] || current.status || 'Status unavailable';
 }
 
 async function verifyPayment(reference) {
-  setStatus('Confirming your payment…');
+  setStatus('Confirming your payment. Please wait…');
 
   try {
-    const verified = await api.post('/billing/verify', {
-      reference,
-    });
+    const result = await api.post('/billing/verify', { reference });
 
     setStatus(
-      verified?.data?.message || 'Payment confirmed successfully.',
+      result?.data?.message || 'Payment confirmation received.',
       'billing-success'
     );
 
     return true;
   } catch (error) {
     setStatus(
-      error.message || 'Payment confirmation is still pending. Please refresh shortly.',
+      error.message ||
+        'We could not confirm the payment yet. Please refresh this page shortly before trying to pay again.',
       'billing-error'
     );
 
@@ -380,51 +512,72 @@ async function verifyPayment(reference) {
   }
 }
 
+function removePaymentReferenceFromUrl() {
+  const url = new URL(window.location.href);
+
+  url.searchParams.delete('reference');
+  url.searchParams.delete('trxref');
+
+  window.history.replaceState(
+    {},
+    document.title,
+    `${url.pathname}${url.search}${url.hash}`
+  );
+}
+
 async function load() {
+  if (!grid) return;
+
+  setGridLoading(true);
+  grid.innerHTML = `
+    <div class="billing-loading">
+      Loading available plans…
+    </div>
+  `;
+
   try {
     const result = await api.get('/billing');
 
-    const business = result.data?.business || {};
-    const plans = result.data?.plans || {};
+    const data = result?.data || {};
+    const business = data.business || {};
+    const plans = data.plans || {};
     const current = business.subscription || {};
 
     renderCurrentPlan(current, plans);
 
-    const reference = new URLSearchParams(location.search).get('reference');
+    const params = new URLSearchParams(window.location.search);
+    const reference = params.get('reference') || params.get('trxref');
 
     if (reference) {
       await verifyPayment(reference);
-
-      const cleanUrl = `${location.pathname}${location.hash}`;
-      window.history.replaceState({}, document.title, cleanUrl);
-    }
-
-    if (!Object.keys(plans).length) {
-      grid.innerHTML = `
-        <div class="empty-state">
-          No billing plans are currently available.
-        </div>
-      `;
-      return;
+      removePaymentReferenceFromUrl();
     }
 
     renderPlans(plans, current);
   } catch (error) {
+    setGridLoading(false);
+
     setStatus(
-      error.message || 'Unable to load billing information.',
+      error.message || 'Unable to load your billing information.',
       'billing-error'
     );
 
     grid.innerHTML = `
-      <div class="empty-state">
-        We couldn't load the available plans.
-        <button class="btn btn-secondary" id="retry-billing" type="button">
+      <div class="billing-loading">
+        <p>We couldn't load your subscription plans.</p>
+        <p>Please check your connection and try again.</p>
+        <button
+          class="btn btn-secondary"
+          id="retry-billing"
+          type="button"
+        >
           Try again
         </button>
       </div>
     `;
 
-    document.getElementById('retry-billing')?.addEventListener('click', load);
+    document.getElementById('retry-billing')
+      ?.addEventListener('click', load);
   }
 }
 
