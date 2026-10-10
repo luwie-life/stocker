@@ -1,1 +1,157 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Staff — stocker</title><link rel="stylesheet" href="css/stocker.css"></head><body><div class="app-shell"><aside class="sidebar" id="sidebar"></aside><main class="main-content"><div class="topbar"><div><div class="topbar-business" id="topbar-business">—</div><div class="topbar-meta" id="topbar-user">—</div></div><div class="topbar-actions"><button class="btn btn-secondary" id="logout-btn">Sign out</button></div></div><h1 class="page-heading">Staff</h1><p class="page-intro">Give your team the right access for the work they handle.</p><div class="admin-grid"><section class="card"><div class="section-header"><div><h2 class="card-title">Add staff member</h2><p class="card-subtitle">They can sign in immediately with these details.</p></div></div><form id="staff-form"><div class="field"><label for="staff-name">Full name</label><input id="staff-name" required></div><div class="field"><label for="staff-email">Email</label><input id="staff-email" type="email" required></div><div class="field"><label for="staff-password">Temporary password</label><input id="staff-password" type="password" minlength="8" required></div><div class="form-row"><div class="field"><label for="staff-role">Role</label><select id="staff-role"><option>CASHIER</option><option>SALES_STAFF</option><option>STOREKEEPER</option><option>ACCOUNTANT</option><option>MANAGER</option><option>ADMIN</option></select></div><div class="field"><label for="staff-branch">Branch</label><select id="staff-branch" required></select></div></div><button class="btn btn-primary" id="staff-submit">Add staff member</button></form></section><section class="card"><div class="section-header"><div><h2 class="card-title">Team</h2><p class="card-subtitle">Active membership and branch assignments.</p></div><button class="btn btn-secondary" id="refresh-staff" type="button">Refresh</button></div><div id="staff-list"><div class="empty-state">Loading…</div></div></section></div></main></div><script type="module" src="js/staff/staff.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f5f1" />
+  <meta name="description" content="Manage Stocker team members, roles, and branch access." />
+
+  <title>Staff — stocker</title>
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/stocker.css" />
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation"></aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <div class="topbar-business" id="topbar-business">—</div>
+          <div class="topbar-meta" id="topbar-user">—</div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="btn btn-secondary" id="logout-btn" type="button">
+            Sign out
+          </button>
+        </div>
+      </header>
+
+      <section aria-labelledby="page-title">
+        <h1 class="page-heading" id="page-title">Staff &amp; access</h1>
+        <p class="page-intro">
+          Add team members, assign their responsibilities, and choose which branch they work in.
+        </p>
+      </section>
+
+      <div class="admin-grid">
+        <section class="card" aria-labelledby="add-staff-title">
+          <div class="section-header">
+            <div>
+              <h2 class="card-title" id="add-staff-title">Add a team member</h2>
+              <p class="card-subtitle">
+                Create their sign-in account and assign a role and branch.
+              </p>
+            </div>
+          </div>
+
+          <form id="staff-form">
+            <div class="field">
+              <label for="staff-name">Full name</label>
+              <input
+                id="staff-name"
+                name="fullName"
+                type="text"
+                autocomplete="name"
+                maxlength="120"
+                placeholder="e.g. Ada Okafor"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="staff-email">Work email</label>
+              <input
+                id="staff-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                inputmode="email"
+                placeholder="name@business.com"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="staff-password">Temporary password</label>
+              <input
+                id="staff-password"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                minlength="8"
+                aria-describedby="staff-password-help"
+                placeholder="At least 8 characters"
+                required
+              />
+              <small
+                id="staff-password-help"
+                style="display:block;margin-top:6px;color:var(--muted);line-height:1.5;"
+              >
+                Share this securely with the team member. Use a unique password they can change later if that option is available.
+              </small>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="staff-role">Role</label>
+                <select id="staff-role" name="role" required>
+                  <option value="CASHIER">Cashier</option>
+                  <option value="SALES_STAFF">Sales staff</option>
+                  <option value="STOREKEEPER">Storekeeper</option>
+                  <option value="ACCOUNTANT">Accountant</option>
+                  <option value="MANAGER">Manager</option>
+                  <option value="ADMIN">Administrator</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="staff-branch">Assigned branch</label>
+                <select id="staff-branch" name="branch" required>
+                  <option value="">Loading branches…</option>
+                </select>
+              </div>
+            </div>
+
+            <button
+              class="btn btn-primary"
+              id="staff-submit"
+              type="submit"
+            >
+              Add team member
+            </button>
+          </form>
+        </section>
+
+        <section class="card" aria-labelledby="team-title">
+          <div class="section-header">
+            <div>
+              <h2 class="card-title" id="team-title">Your team</h2>
+              <p class="card-subtitle">
+                Review team roles, branch assignments, and account status.
+              </p>
+            </div>
+
+            <button
+              class="btn btn-secondary"
+              id="refresh-staff"
+              type="button"
+            >
+              Refresh
+            </button>
+          </div>
+
+          <div id="staff-list" aria-live="polite" aria-busy="true">
+            <div class="empty-state">Loading team…</div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/staff/staff.js"></script>
+</body>
+</html>
