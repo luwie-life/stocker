@@ -1,24 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Admin — stocker</title>
-<link rel="stylesheet" href="css/stocker.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f5f1" />
+  <meta
+    name="description"
+    content="Manage your Stocker business branches, monitor sales, and review inventory activity."
+  />
+
+  <title>Admin Workspace — stocker</title>
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/stocker.css" />
+
+  <style>
+    .admin-page-intro {
+      max-width: 720px;
+      margin-bottom: 28px;
+    }
+
+    .admin-page-intro .page-intro {
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    #admin-content {
+      min-width: 0;
+    }
+
+    #admin-content .stats-grid {
+      margin-bottom: 24px;
+    }
+
+    #admin-content .admin-grid {
+      align-items: start;
+      gap: 20px;
+    }
+
+    #admin-content .card {
+      min-width: 0;
+    }
+
+    #admin-content .section-header {
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    #admin-content .section-header > div {
+      min-width: 0;
+    }
+
+    #admin-content .card-subtitle {
+      line-height: 1.6;
+    }
+
+    #admin-content .inline-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(100px, 0.55fr) auto;
+      align-items: end;
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    #admin-content .inline-form input {
+      width: 100%;
+      min-width: 0;
+      min-height: 44px;
+    }
+
+    #admin-content .inline-form button {
+      min-height: 44px;
+      white-space: nowrap;
+    }
+
+    #admin-content .table-wrap {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #admin-content table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #admin-content th,
+    #admin-content td {
+      padding: 12px 10px;
+      text-align: left;
+      vertical-align: middle;
+      overflow-wrap: anywhere;
+    }
+
+    #admin-content td {
+      line-height: 1.5;
+    }
+
+    #admin-content .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 100%;
+      white-space: normal;
+    }
+
+    #admin-content .empty-state {
+      line-height: 1.7;
+    }
+
+    #admin-content button:focus-visible,
+    #admin-content a:focus-visible,
+    #admin-content input:focus-visible {
+      outline: 3px solid rgba(107, 79, 58, 0.35);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 760px) {
+      .admin-page-intro {
+        margin-bottom: 22px;
+      }
+
+      #admin-content .admin-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      #admin-content .inline-form {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+      }
+
+      #admin-content .inline-form button {
+        grid-column: 1 / -1;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #admin-content .inline-form {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      #admin-content .inline-form button {
+        grid-column: auto;
+      }
+
+      #admin-content .section-header > .btn {
+        width: 100%;
+      }
+
+      #admin-content th,
+      #admin-content td {
+        padding: 10px 8px;
+        font-size: 0.82rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #admin-content *,
+      #admin-content *::before,
+      #admin-content *::after {
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="app-shell">
-  <aside class="sidebar" id="sidebar"></aside>
-  <main class="main-content">
-    <div class="topbar">
-      <div><div class="topbar-business" id="topbar-business">—</div><div class="topbar-meta" id="topbar-user">—</div></div>
-      <div class="topbar-actions"><button class="btn btn-secondary" id="logout-btn">Sign out</button></div>
-    </div>
-    <h1 class="page-heading">Admin workspace</h1>
-    <p class="page-intro">A live view of your catalogue, locations, and recent activity.</p>
-    <div id="admin-content"><div class="empty-state">Loading workspace…</div></div>
-  </main>
-</div>
-<script type="module" src="js/admin/admin.js"></script>
+  <div class="app-shell">
+    <aside
+      class="sidebar"
+      id="sidebar"
+      aria-label="Main navigation"
+    ></aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <div class="topbar-business" id="topbar-business">—</div>
+          <div class="topbar-meta" id="topbar-user">—</div>
+        </div>
+
+        <div class="topbar-actions">
+          <button
+            class="btn btn-secondary"
+            id="logout-btn"
+            type="button"
+          >
+            Sign out
+          </button>
+        </div>
+      </header>
+
+      <section class="admin-page-intro" aria-labelledby="admin-title">
+        <span class="eyebrow">Business management</span>
+
+        <h1 class="page-heading" id="admin-title">
+          Admin workspace
+        </h1>
+
+        <p class="page-intro">
+          Monitor today's sales, review inventory activity, and manage the
+          branches connected to your business.
+        </p>
+      </section>
+
+      <div id="admin-content" aria-live="polite" aria-busy="true">
+        <div class="empty-state">
+          Loading your business overview…
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/admin/admin.js"></script>
 </body>
 </html>
