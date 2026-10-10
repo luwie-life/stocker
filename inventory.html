@@ -4,7 +4,12 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>Inventory — stocker</title>
+  <meta
+    name="description"
+    content="Manage your products, prices, and stock levels with Stocker."
+  />
+
+  <title>Inventory — Stocker</title>
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
   <link rel="stylesheet" href="css/stocker.css">
@@ -15,6 +20,7 @@
     <aside
       class="sidebar"
       id="sidebar"
+      aria-label="Main navigation"
     ></aside>
 
     <main class="main-content">
@@ -42,23 +48,21 @@
         </div>
       </div>
 
-      <h1 class="page-heading">
-        Inventory
-      </h1>
+      <h1 class="page-heading">Inventory</h1>
 
       <p class="page-intro">
-        Keep products, pricing, and stock levels in one reliable ledger.
+        Manage your products, selling prices, and available stock in one place.
       </p>
 
-      <div class="card">
+      <section class="card" aria-labelledby="products-heading">
         <div class="section-header">
           <div>
-            <h2 class="card-title">
-              Products
+            <h2 class="card-title" id="products-heading">
+              Your products
             </h2>
 
             <p class="card-subtitle">
-              Search and update the catalogue for this branch.
+              Find products, update their details, or record stock changes.
             </p>
           </div>
 
@@ -72,8 +76,9 @@
           >
             <input
               id="search-input"
-              placeholder="Search name, SKU or barcode…"
-              aria-label="Search products"
+              type="search"
+              placeholder="Search products..."
+              aria-label="Search products by name, SKU, or barcode"
               style="
                 padding:9px 12px;
                 border:1px solid var(--border);
@@ -90,7 +95,7 @@
               id="import-products-btn"
               type="button"
             >
-              Import Excel
+              Import from Excel
             </button>
 
             <button
@@ -104,13 +109,16 @@
         </div>
 
         <div id="product-list"></div>
-      </div>
+      </section>
     </main>
   </div>
 
   <!-- Import inventory modal -->
   <div
     id="import-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="import-modal-title"
     style="
       display:none;
       position:fixed;
@@ -136,18 +144,15 @@
         style="margin-bottom:18px;"
       >
         <div>
-          <h3
-            style="margin:0;"
+          <h2
+            class="card-title"
             id="import-modal-title"
           >
-            Import inventory
-          </h3>
+            Import products
+          </h2>
 
-          <p
-            class="card-subtitle"
-            style="margin-bottom:0;"
-          >
-            Bring your products into Stocker from the Stocker Excel template.
+          <p class="card-subtitle" style="margin-bottom:0;">
+            Add products to Stocker using an Excel or CSV file.
           </p>
         </div>
       </div>
@@ -170,7 +175,7 @@
               margin-bottom:8px;
             "
           >
-            Already have your inventory?
+            Already have a product list?
           </div>
 
           <p
@@ -181,8 +186,8 @@
               line-height:1.6;
             "
           >
-            Download the Stocker template, fill in your products,
-            then upload it here.
+            Download our template, enter your product details,
+            and upload the completed file here.
           </p>
 
           <div
@@ -198,7 +203,7 @@
               id="download-template-btn"
               type="button"
             >
-              Download template
+              Download Excel template
             </button>
           </div>
         </div>
@@ -208,7 +213,7 @@
           style="margin-top:18px;"
         >
           <label for="import-file">
-            Excel file
+            Choose your product file
           </label>
 
           <input
@@ -224,7 +229,7 @@
               color:var(--muted);
             "
           >
-            Supported files: .xlsx, .xls and .csv. Maximum 10MB.
+            Accepted formats: XLSX, XLS, and CSV. Maximum file size: 10 MB.
           </small>
         </div>
 
@@ -249,7 +254,7 @@
             class="btn btn-primary"
             id="preview-import-btn"
           >
-            Review import
+            Review products
           </button>
         </div>
       </div>
@@ -271,6 +276,7 @@
 
         <div
           id="import-plan-warning"
+          role="alert"
           style="
             display:none;
             padding:13px 14px;
@@ -284,6 +290,7 @@
 
         <div
           id="import-errors"
+          role="alert"
           style="display:none;"
         ></div>
 
@@ -296,9 +303,7 @@
             margin-top:14px;
           "
         >
-          <strong>
-            Before you import
-          </strong>
+          <strong>Before you continue</strong>
 
           <p
             style="
@@ -307,8 +312,9 @@
               line-height:1.5;
             "
           >
-            Stocker will create the valid products and add any
-            opening stock to the currently selected branch.
+            Stocker will create the valid products in your file and add
+            any opening stock to the currently selected branch.
+            Review the import summary and any errors before continuing.
           </p>
         </div>
 
@@ -343,6 +349,9 @@
   <!-- Add or edit product modal -->
   <div
     id="product-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
     style="
       display:none;
       position:fixed;
@@ -351,6 +360,7 @@
       align-items:center;
       justify-content:center;
       z-index:500;
+      padding:20px;
     "
   >
     <div
@@ -358,14 +368,17 @@
       style="
         width:420px;
         max-width:92vw;
+        max-height:90vh;
+        overflow:auto;
       "
     >
-      <h3
-        style="margin-top:0"
+      <h2
+        class="card-title"
         id="modal-title"
+        style="margin-top:0;"
       >
         Add product
-      </h3>
+      </h2>
 
       <form id="product-form">
         <input
@@ -374,35 +387,39 @@
         />
 
         <div class="field">
-          <label for="p-name">Name</label>
+          <label for="p-name">Product name</label>
           <input
             id="p-name"
             required
+            autocomplete="off"
           />
         </div>
 
         <div class="field">
           <label for="p-sku">SKU (optional)</label>
-          <input id="p-sku"/>
+          <input
+            id="p-sku"
+            autocomplete="off"
+          />
         </div>
 
         <div class="field">
           <label for="p-barcode">Barcode (optional)</label>
-          <input id="p-barcode"/>
+          <input
+            id="p-barcode"
+            autocomplete="off"
+          />
         </div>
 
         <div
           style="
             display:grid;
-            grid-template-columns:1fr 1fr;
+            grid-template-columns:repeat(2,minmax(0,1fr));
             gap:12px;
           "
         >
           <div class="field">
-            <label
-              id="cost-label"
-              for="p-cost"
-            >
+            <label id="cost-label" for="p-cost">
               Cost price
             </label>
 
@@ -416,10 +433,7 @@
           </div>
 
           <div class="field">
-            <label
-              id="price-label"
-              for="p-price"
-            >
+            <label id="price-label" for="p-price">
               Selling price
             </label>
 
@@ -435,7 +449,7 @@
 
         <div class="field">
           <label for="p-minstock">
-            Minimum stock alert
+            Low-stock alert level
           </label>
 
           <input
@@ -444,6 +458,10 @@
             min="0"
             value="0"
           />
+
+          <small style="color:var(--muted);">
+            Stocker can use this quantity to identify products that need restocking.
+          </small>
         </div>
 
         <div
@@ -477,6 +495,9 @@
   <!-- Adjust stock modal -->
   <div
     id="stock-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="stock-modal-title"
     style="
       display:none;
       position:fixed;
@@ -485,6 +506,7 @@
       align-items:center;
       justify-content:center;
       z-index:500;
+      padding:20px;
     "
   >
     <div
@@ -492,11 +514,17 @@
       style="
         width:360px;
         max-width:92vw;
+        max-height:90vh;
+        overflow:auto;
       "
     >
-      <h3 style="margin-top:0">
-        Adjust stock
-      </h3>
+      <h2
+        class="card-title"
+        id="stock-modal-title"
+        style="margin-top:0;"
+      >
+        Update stock
+      </h2>
 
       <form id="stock-form">
         <input
@@ -505,9 +533,7 @@
         />
 
         <div class="field">
-          <label for="s-type">
-            Movement type
-          </label>
+          <label for="s-type">Reason for stock change</label>
 
           <select id="s-type">
             <option value="OPENING_STOCK">
@@ -515,45 +541,56 @@
             </option>
 
             <option value="PURCHASE">
-              Purchase received
+              New stock received
             </option>
 
             <option value="MANUAL_ADD">
-              Manual add
+              Add stock
             </option>
 
             <option value="MANUAL_REMOVE">
-              Manual remove
+              Remove stock
             </option>
 
             <option value="DAMAGE">
-              Damage / write-off
+              Damaged or written-off stock
             </option>
 
             <option value="ADJUSTMENT">
-              Adjustment
+              Stock correction
             </option>
           </select>
         </div>
 
         <div class="field">
           <label for="s-quantity">
-            Quantity (use negative to remove)
+            Quantity change
           </label>
 
           <input
             id="s-quantity"
             type="number"
             required
+            aria-describedby="stock-quantity-help"
           />
+
+          <small
+            id="stock-quantity-help"
+            style="color:var(--muted);"
+          >
+            Enter a positive number to add stock or a negative number to remove it.
+          </small>
         </div>
 
         <div class="field">
           <label for="s-reason">
-            Reason (optional)
+            Additional notes (optional)
           </label>
 
-          <input id="s-reason"/>
+          <input
+            id="s-reason"
+            placeholder="e.g. Damaged during delivery"
+          />
         </div>
 
         <div
@@ -575,7 +612,7 @@
             type="submit"
             class="btn btn-primary"
           >
-            Apply
+            Update stock
           </button>
         </div>
       </form>
